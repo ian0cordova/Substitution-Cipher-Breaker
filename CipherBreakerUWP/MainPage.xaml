@@ -10,23 +10,26 @@
     <Grid x:Name="mainGrid" Background="#8764b8">
         <TextBlock 
             x:Name="tbHeader"
-            Margin="84,44,0,925"
             Text="Subsitution Cipher Breaker"
+            FontSize="48"
+            Margin="84,44,0,31"
             FontWeight="SemiBold"
-            HorizontalAlignment="Left" >
+            HorizontalAlignment="Left" Width="608" >
         </TextBlock>
         <Button 
             Content="Create a cipher." 
             Click="NavigationButton_Click"
+            FontSize="24"
             Background="LightGray"
             HorizontalAlignment="Left" 
-            Margin="84,135,0,0" 
-            VerticalAlignment="Top"/>
+            Margin="84,175,0,0" 
+            VerticalAlignment="Top" RenderTransformOrigin="0.488,1.969"/>
         <Button 
             Content="Decipher text." 
+            FontSize="24"
             HorizontalAlignment="Left" 
             Background="LightGray"
-            Margin="84,192,0,0" 
-            VerticalAlignment="Top"/>
+            Margin="84,260,0,0" 
+            VerticalAlignment="Top" RenderTransformOrigin="0.491,1.409"/>
     </Grid>
 </Page>

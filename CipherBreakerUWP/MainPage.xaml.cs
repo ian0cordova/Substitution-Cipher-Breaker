@@ -31,10 +31,5 @@ namespace CipherBreakerUWP
         {
             Frame.Navigate(typeof(CipherPage));
         }
-
-        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

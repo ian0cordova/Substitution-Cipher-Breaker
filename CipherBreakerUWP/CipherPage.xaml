@@ -10,18 +10,25 @@
     <Grid Background="#8764b8">
         <TextBlock 
             x:Name="tbHeader"
-            Margin="84,44,0,925"
+            Margin="84,44,0,354"
             Text="Create a Cipher"
+            FontSize="48"
             FontWeight="SemiBold"
             HorizontalAlignment="Left" >
         </TextBlock>
         <TextBlock
             x:Name="tbAlphabet"
-            Margin="84,116,0,351"
+            Margin="84,150,0,-26"
+            FontSize="12"
             Text="A&#x0a;B&#x0a;C&#x0a;D&#x0a;E&#x0a;F&#x0a;G&#x0a;H&#x0a;I&#x0a;J&#x0a;K&#x0a;L&#x0a;M&#x0a;N&#x0a;O&#x0a;P&#x0a;Q&#x0a;R&#x0a;S&#x0a;T&#x0a;U&#x0a;V&#x0a;W&#x0a;X&#x0a;Y&#x0a;Z"
             FontWeight="SemiBold"
             HorizontalAlignment="Left" Width="37">
         </TextBlock>
+        <Button 
+            x:Name="BackButton"
+            Click="Back_Click"
+            VerticalAlignment="Top" HorizontalAlignment="Left" 
+            Style="{StaticResource NavigationBackButtonNormalStyle}"/>
 
     </Grid>
 </Page>
