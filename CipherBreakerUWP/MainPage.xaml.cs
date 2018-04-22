@@ -24,12 +24,12 @@ namespace CipherBreakerUWP
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void NavigationButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame.Navigate(typeof(CipherPage));
         }
 
         private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
