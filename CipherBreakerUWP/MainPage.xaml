@@ -7,13 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button Content="Do Stuff" HorizontalAlignment="Left" Margin="84,135,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.094,-0.912"/>
-        <TextBlock HorizontalAlignment="Left" Margin="77,65,0,0" Text="Substitution Cipher Breaker" TextWrapping="Wrap" VerticalAlignment="Top" Height="61" Width="384" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" SelectionChanged="TextBlock_SelectionChanged">
-            <TextBlock.RenderTransform>
-                <CompositeTransform Rotation="0.117"/>
-            </TextBlock.RenderTransform>
+    <Grid x:Name="mainGrid" Background="#8764b8">
+        <TextBlock 
+            x:Name="tbHeader"
+            Margin="84,44,0,925"
+            Text="Subsitution Cipher Breaker"
+            FontWeight="SemiBold"
+            HorizontalAlignment="Left" >
         </TextBlock>
-
+        <Button 
+            Content="Create a cipher." 
+            Click="NavigationButton_Click"
+            Background="LightGray"
+            HorizontalAlignment="Left" 
+            Margin="84,135,0,0" 
+            VerticalAlignment="Top"/>
+        <Button 
+            Content="Decipher text." 
+            HorizontalAlignment="Left" 
+            Background="LightGray"
+            Margin="84,192,0,0" 
+            VerticalAlignment="Top"/>
     </Grid>
 </Page>
