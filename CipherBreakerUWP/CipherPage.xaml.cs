@@ -23,11 +23,19 @@ namespace CipherBreakerUWP
     /// </summary>
     public sealed partial class CipherPage : Page
     {
+        /// <summary>
+        /// Initializes page
+        /// </summary>
         public CipherPage()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Provides functionality to back button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainPage));

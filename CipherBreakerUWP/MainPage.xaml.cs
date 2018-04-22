@@ -22,12 +22,29 @@ namespace CipherBreakerUWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        /// <summary>
+        /// Initializes page
+        /// </summary>
+        /// 
+        /// <author>
+        /// Ian Cordova
+        /// </author>
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void NavigationButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Navigates to Cipher page.
+        /// </summary>
+        /// 
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// 
+        /// <author>
+        /// Ian Cordova - 2:00am 4/22/2018
+        /// </author>
+        private void NavigateToCipherPage_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(CipherPage));
         }

@@ -111,6 +111,5 @@ namespace CipherMaker
             }
             return encodedText;
         }
-
     }
 }
