@@ -8,6 +8,7 @@
     mc:Ignorable="d">
 
     <Grid x:Name="mainGrid" Background="#8764b8">
+        <!-- Main Header -->
         <TextBlock 
             x:Name="tbHeader"
             Text="Subsitution Cipher Breaker"
@@ -16,6 +17,7 @@
             FontWeight="SemiBold"
             HorizontalAlignment="Left" Width="608" >
         </TextBlock>
+        <!-- Navigate to cipher creator page -->
         <Button 
             Content="Create a cipher." 
             Click="NavigateToCipherPage_Click"
@@ -23,13 +25,14 @@
             Background="LightGray"
             HorizontalAlignment="Left" 
             Margin="84,175,0,0" 
-            VerticalAlignment="Top" RenderTransformOrigin="0.488,1.969"/>
+            VerticalAlignment="Top"/>
+        <!-- Navigate to decipher page -->
         <Button 
             Content="Decipher text." 
             FontSize="24"
             HorizontalAlignment="Left" 
             Background="LightGray"
             Margin="84,260,0,0" 
-            VerticalAlignment="Top" RenderTransformOrigin="0.491,1.409"/>
+            VerticalAlignment="Top" />
     </Grid>
 </Page>

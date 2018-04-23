@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace CipherMaker
 {
@@ -51,7 +52,11 @@ namespace CipherMaker
             for(int i = 0; i < 26; ++i)
             {
                 // generate a random letter and check if it has already been used.
-                do randLetter = rand.Next(0, 25); while ((CipherContains(subCipher, m_Alphabet[randLetter])));
+                do randLetter = rand.Next(0, 26); while ((CipherContains(subCipher, m_Alphabet[randLetter])));
+                //randLetter = rand.Next(0, 25);
+                // assign random letter to next letter in alphabet
+                subCipher.Add(m_Alphabet[i], m_Alphabet[randLetter]);
+                Debug.WriteLine(subCipher[m_Alphabet[i]]);
             }
             return subCipher;
         } 
