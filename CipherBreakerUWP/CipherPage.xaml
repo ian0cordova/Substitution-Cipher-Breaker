@@ -27,7 +27,7 @@
             HorizontalAlignment="Left" 
             Width="40">
         </TextBlock>
-
+        <!-- Cipher text block - generated cipher alphabet shows up here -->
         <TextBlock
             x:Name="tbCipherAlphabet"
             Margin="119,150,0,-26"
@@ -50,6 +50,40 @@
             Background="LightGray"
             VerticalAlignment="Top"
             Click="createCipherBtn_Click"/>
-
+        <!-- Label for RichEditBox below -->
+        <TextBlock 
+            HorizontalAlignment="Left" 
+            Margin="385,150,0,-26" 
+            Text="Enter text to be translated here." 
+            VerticalAlignment="Top"/>
+        <!-- Field for user to enter text to be translated -->
+        <RichEditBox      
+            x:Name="rebPlainText"
+            HorizontalAlignment="Left" 
+            Margin="384,170,0,0" 
+            VerticalAlignment="Top" 
+            Height="160" Width="300"/>
+        <!-- Label for RichEditBox below -->
+        <TextBlock 
+            Text="Translation:" 
+            HorizontalAlignment="Left" 
+            Margin="384,380,0,0" 
+            VerticalAlignment="Top"/>
+        <!-- Translation to cipher text shown here -->
+        <RichEditBox 
+            x:Name="rebCipherText"
+            HorizontalAlignment="Left" 
+            Margin="384,400,0,0" 
+            VerticalAlignment="Top"
+            Height="160" Width="300"/>
+        <!-- Translates plain text to current shown cipher -->
+        <Button 
+            x:Name="btnTranslate"
+            Content="Translate" 
+            Click="btnTranslate_Click"
+            HorizontalAlignment="Left" 
+            Margin="384,604,0,0" 
+            Background="LightGray"
+            VerticalAlignment="Top"/>
     </Grid>
 </Page>

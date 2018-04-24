@@ -107,14 +107,45 @@ namespace CipherMaker
         public string EncodeText(string a_plainText, Dictionary<char, char> a_cipher)
         {
             string encodedText = "";
+            string cleanText = CleanString(a_plainText);
 
             // iterate through plaintext
-            foreach(char i in a_plainText)
+            foreach(char i in cleanText)
             {
+                if (i == ' ' || i == '\n')
+                {
+                    encodedText += i;
+                    continue;
+                }
                 // assign value to its ciphered, capital value
                 encodedText += a_cipher[Char.ToUpper(i)];
             }
             return encodedText;
+        }
+        
+        /// <summary>
+        /// Removes all punctuation and non-needed characters from the string.
+        /// </summary>
+        /// 
+        /// <param name="a_text"> string to be cleaned </param>
+        /// 
+        /// <returns>
+        /// Original string removed of unnecessary characters.
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 9:00pm, 4/23/2018
+        /// </author>
+        private string CleanString(string a_text)
+        {
+            string cleanString = "";
+            foreach(char i in a_text)
+            {
+                if (i == '\r' || i == '\t' || i == '\0' || i == '.' || i == '!' || i == ',' || i == '?') continue;
+                cleanString += i;
+            }
+
+            return cleanString;
         }
     }
 }
