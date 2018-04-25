@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace CipherMaker
+namespace Cipher.CipherMaker
 {
     /// <summary>
     /// Handles the creation and translation of substitution ciphers.
     /// </summary>
-    public class CipherCreator
+    public class CipherMaker
     {
         /// <summary>
         /// String which contains the alphabet.
@@ -21,15 +21,10 @@ namespace CipherMaker
         /// <summary>
         /// Static constructor to initialize alphabet. It is invoked before the first instance constructor is run.
         /// </summary>
-        static CipherCreator()
+        static CipherMaker()
         {
             m_Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         }
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public CipherCreator() { }
 
         /// <summary>
         /// Creates a random substitution Cipher
@@ -42,7 +37,7 @@ namespace CipherMaker
         /// <author>
         /// Ian Cordova - 11:30pm, 4/21/2018
         /// </author>
-        public Dictionary<char, char> CreateSubCipher()
+        public static Dictionary<char, char> CreateSubCipher()
         {
             Dictionary<char, char> subCipher = new Dictionary<char, char>();
             Random rand = new Random();
@@ -75,7 +70,7 @@ namespace CipherMaker
         /// <author>
         /// Ian Cordova 11:30pm, 4/21/2018
         /// </author>
-        public bool CipherContains(Dictionary<char, char> a_cipher, char a_value)
+        public static bool CipherContains(Dictionary<char, char> a_cipher, char a_value)
         {
             // iterate through dictionary
             foreach (KeyValuePair<char, char> entry in a_cipher)
@@ -104,7 +99,7 @@ namespace CipherMaker
         /// <author>
         /// Ian Cordova 11:50pm, 4/21/2018
         /// </author>
-        public string EncodeText(string a_plainText, Dictionary<char, char> a_cipher)
+        public static string EncodeText(string a_plainText, Dictionary<char, char> a_cipher)
         {
             string encodedText = "";
             string cleanText = CleanString(a_plainText);
@@ -136,7 +131,7 @@ namespace CipherMaker
         /// <author>
         /// Ian Cordova - 9:00pm, 4/23/2018
         /// </author>
-        private string CleanString(string a_text)
+        private static string CleanString(string a_text)
         {
             string cleanString = "";
             foreach(char i in a_text)

@@ -1,27 +1,16 @@
-﻿using System;
+﻿/// CipherPage.xaml.cs
+/// Ian Cordova
+/// Senior Project
+
+using Cipher.CipherMaker;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-using CipherMaker;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace CipherBreakerUWP
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page in which cipher creation and translation to cipher text is done.
     /// </summary>
     public sealed partial class CipherPage : Page
     {
@@ -66,9 +55,8 @@ namespace CipherBreakerUWP
             // Clears textbox before new generation
             tbCipherAlphabet.Text = "";
 
-            CipherCreator cipherCreator = new CipherCreator();
             Dictionary<char, char> cipher = new Dictionary<char, char>();
-            cipher = cipherCreator.CreateSubCipher();
+            cipher = CipherMaker.CreateSubCipher();
 
             // Adds each value from cipher to text box to be displayed
             foreach (KeyValuePair<char, char> entry in cipher)
@@ -109,8 +97,7 @@ namespace CipherBreakerUWP
             rebPlainText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out plainText);
 
             // Encode plain text with the generated cipher
-            CipherCreator cipherCreator = new CipherCreator();
-            cipherText = cipherCreator.EncodeText(plainText, m_currentCipher);
+            cipherText = CipherMaker.EncodeText(plainText, m_currentCipher);
 
             // Set cipher text to rich edit box
             rebCipherText.IsReadOnly = false;
