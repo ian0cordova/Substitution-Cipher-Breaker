@@ -13,7 +13,6 @@ namespace CipherSolver
         // remove this after testing
         static void Main(string[] args)
         {
-            GetnGramsFromDataSet();
             //Console.ReadLine();
         }
 
@@ -37,16 +36,6 @@ namespace CipherSolver
             {
                 allnGrams.Add(FindnGrams(i, a_word));
             }
-
-            //foreach (list<string> i in allngrams)
-            //{
-            //    console.write("n = " + i[0].length + '\n');
-            //    foreach (string j in i)
-            //    {
-            //        console.write(j + '\n');
-            //    }
-            //    console.write('\n');
-            //}
 
             return allnGrams;
         }
@@ -125,10 +114,10 @@ namespace CipherSolver
         /// ie it should be only called once, and not during normal project run time. This method
         /// should probably be a separate entity in the form of a separate program or a script, but 
         /// since it uses the same functionality that the main project does I am including it here 
-        /// to see everything that was done to achieve the finished project
+        /// to see everything that was done to achieve the finished result
         /// </summary>
         /// 
-        ///<returns>
+        /// <returns>
         /// void - but reads/writes to files
         /// </returns>
         /// 
@@ -210,14 +199,14 @@ namespace CipherSolver
             } // end using
 
             // write dictionaries to files
-            using (StreamWriter biGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\Bigrams.txt"))
+            using (StreamWriter biGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetBigrams.txt"))
             {
                 foreach(var entry in bigrams)
                 {
                     biGramFile.WriteLine("[{0} {1}]", entry.Key, entry.Value);
                 }
             }
-            using (StreamWriter triGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\Trigrams.txt"))
+            using (StreamWriter triGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetTrigrams.txt"))
             {
                 foreach (var entry in trigrams)
                 {
