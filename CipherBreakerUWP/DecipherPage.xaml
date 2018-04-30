@@ -1,0 +1,27 @@
+﻿<Page
+    x:Class="CipherBreakerUWP.DecipherPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CipherBreakerUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="#8764b8">
+        <!-- Main header -->
+        <TextBlock 
+            x:Name="tbDecipherHeader"
+            Margin="84,28,0,30"
+            Text="Decipher Encoded Text"
+            FontSize="48"
+            FontWeight="SemiBold"
+            HorizontalAlignment="Left" >
+        </TextBlock>
+        <Button 
+            x:Name="BackButton"
+            Click="Back_Click"
+            VerticalAlignment="Top" HorizontalAlignment="Left" 
+            Style="{StaticResource NavigationBackButtonNormalStyle}"/>
+
+    </Grid>
+</Page>

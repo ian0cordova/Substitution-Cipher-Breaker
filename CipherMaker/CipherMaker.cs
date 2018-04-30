@@ -136,11 +136,30 @@ namespace Cipher.CipherMaker
             string cleanString = "";
             foreach(char i in a_text)
             {
-                if (i == '\r' || i == '\t' || i == '\0' || i == '.' || i == '!' || i == ',' || i == '?') continue;
-                cleanString += i;
+                if (IsEnglishLetter(i) || i == ' ' || i == '\n')
+                {
+                    cleanString += i;
+                }
             }
-
             return cleanString;
+        }
+
+        /// <summary>
+        /// Determines if the specified character is actually a letter
+        /// </summary>
+        /// 
+        /// <param name="a_character"> Single character to test </param>
+        /// 
+        /// <returns>
+        /// If char is an english letter return true, else false.
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 9:00pm, 4/24/2018
+        /// </author>
+        private static bool IsEnglishLetter(char a_character)
+        {
+            return ((a_character >= 'A' && a_character <= 'Z') || (a_character >= 'a' && a_character <= 'z'));
         }
     }
 }

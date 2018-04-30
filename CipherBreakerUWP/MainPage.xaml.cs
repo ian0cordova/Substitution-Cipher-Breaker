@@ -38,5 +38,20 @@ namespace CipherBreakerUWP
         {
             Frame.Navigate(typeof(CipherPage));
         }
+
+        /// <summary>
+        /// Navigates to Decipher page.
+        /// </summary>
+        /// 
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// 
+        /// <author>
+        /// Ian Cordova - 10:00pm 4/25/2018
+        /// </author>
+        private void NavigateToDecipherPage_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(DecipherPage));
+        }
     }
 }

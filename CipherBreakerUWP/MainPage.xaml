@@ -29,6 +29,7 @@
         <!-- Navigate to decipher page -->
         <Button 
             Content="Decipher text." 
+            Click="NavigateToDecipherPage_Click"
             FontSize="24"
             HorizontalAlignment="Left" 
             Background="LightGray"
