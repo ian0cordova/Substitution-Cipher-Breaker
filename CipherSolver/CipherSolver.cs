@@ -27,9 +27,9 @@ namespace CipherSolver
 
             Console.WriteLine(plainTriGrams.Values.Max()); */
 
-            //GenerateInitialChromosome();
-            GetnGramsFromDataSet();
-            //Console.ReadLine();
+            GenerateInitialChromosome();
+            //GetnGramsFromDataSet();
+            Console.ReadLine();
         }
 
         /// <summary>
@@ -51,8 +51,15 @@ namespace CipherSolver
 
             Dictionary<string, int> chromosome = new Dictionary<string, int>();
             Dictionary<string, int> cipherTriGrams = new Dictionary<string, int>();
+            Dictionary<string, int> dataSetTriGrams = new Dictionary<string, int>();
+
+            // find all tri-grams for the cipher text
             cipherTriGrams = FindnGrams(3, cipherText);
 
+            // read all tri-grams from dataset
+            dataSetTriGrams = GetTopnGrams(cipherTriGrams.Count);
+
+            // sort trigrams from cipher by frequency, highest to lowest
             cipherTriGrams = (from entry in cipherTriGrams orderby entry.Value descending select entry)
               .ToDictionary(pair => pair.Key, pair => pair.Value);
 
@@ -60,18 +67,65 @@ namespace CipherSolver
             {
                 Console.WriteLine(entry.Key + " : " + entry.Value);
             }
+            Console.WriteLine('\n');
+
+            foreach (var entry in dataSetTriGrams)
+            {
+                Console.WriteLine(entry.Key + ':' + entry.Value);
+            }         
         }
 
         /// <summary>
-        /// 
+        /// Reads in the most frequent n-grams from our training data to use for 
         /// </summary>
-        /// <returns></returns>
-        static Dictionary<string, int> GetTopnGrams()
+        /// 
+        /// <returns>
+        /// Dictionary containing the most frequent n-grams from the dataset
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 6:50pm 4/30/2018
+        /// </author>
+        static Dictionary<string, int> GetTopnGrams(int a_numberOfnGrams)
         {
             Dictionary<string, int> topnGrams = new Dictionary<string, int>();
 
+            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetTriGrams.txt";
 
+            using (FileStream fs = File.Open(path, FileMode.Open))
+            using (BufferedStream bs = new BufferedStream(fs))
+            using (StreamReader sr = new StreamReader(bs))
+            {
+                string line;
 
+                // find specified number of nGrams
+                for(int i = 0; i < a_numberOfnGrams; ++i)
+                {
+                    string nGram = "";
+                    string nGramCount = "";
+                    int nGramCountNum;
+                    // end of file
+                    if ((line = sr.ReadLine()) == null) break;
+                    foreach(char ch in line)
+                    {
+                        if (ch == '[' || ch == ']' || ch == ' ') continue;
+
+                        // read n-gram
+                        else if(IsEnglishLetter(ch))
+                        {
+                            nGram += ch;
+                        }
+                        // read n-gram count
+                        else if(Char.IsNumber(ch))
+                        {
+                            nGramCount += ch;
+                        }
+                    }
+
+                    nGramCountNum = Int32.Parse(nGramCount);
+                    topnGrams.Add(nGram, nGramCountNum);
+                }
+            }
             return topnGrams;
         }
 
