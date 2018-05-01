@@ -8,8 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace CipherSolver
+namespace Cipher.CipherSolver
 {
+    /// <summary>
+    /// Handles the deciphering of encoded text
+    /// </summary>
     class CipherSolver
     {
         // remove this after testing
