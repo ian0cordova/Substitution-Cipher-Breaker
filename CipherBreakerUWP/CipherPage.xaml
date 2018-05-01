@@ -82,15 +82,17 @@
             Content="Translate" 
             Click="btnTranslate_Click"
             HorizontalAlignment="Left" 
-            Margin="380,604,0,0" 
+            Margin="736,400,0,0" 
             Width="130"
             Background="LightGray"
             VerticalAlignment="Top"/>
         <!-- Loads plain text from a file -->
         <Button 
+            x:Name="btnLoadText"
+            Click="btnLoadText_Click"
             Content="Load Plain Text" 
             HorizontalAlignment="Left" 
-            Margin="380,640,0,0" 
+            Margin="736,464,0,0" 
             Width="130"
             Background="LightGray"
             VerticalAlignment="Top"/>
@@ -98,14 +100,14 @@
         <Button 
             Content="Save Cipher Text" 
             HorizontalAlignment="Left" 
-            Margin="380,676,0,0" 
+            Margin="736,528,0,0" 
             Width="130"
             Background="LightGray"
             VerticalAlignment="Top"/>
         <!-- Allows user to specify a file name -->
         <TextBox 
             HorizontalAlignment="Left" 
-            Margin="520,676,0,0" 
+            Margin="871,528,0,0" 
             PlaceholderText="Type file name..." 
             VerticalAlignment="Top" 
             Width="130"/>

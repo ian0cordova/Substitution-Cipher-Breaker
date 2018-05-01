@@ -26,7 +26,7 @@ namespace Cipher.CipherUtility
         {
             string plainText = "";
 
-            using (FileStream fs = new FileStream(a_filePath, FileMode.Open))
+            using (FileStream fs = new FileStream("C:\\Users\\icordova\\Documents\\test.txt", FileMode.Open, FileAccess.Read))
             using (StreamReader sr = new StreamReader(fs))
             {
                 string line;

@@ -7,7 +7,9 @@ using Cipher.CipherUtility;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -110,6 +112,12 @@ namespace CipherBreakerUWP
             rebCipherText.IsReadOnly = true;
         }
 
+        private async void btnLoadText_Click(object sender, RoutedEventArgs e)
+        {
+            var plainText = await SelectPlainTextFileAsync();
+            rebPlainText.Document.SetText(Windows.UI.Text.TextSetOptions.None, plainText.ToString());
+        }
+
         /// <summary>
         /// Allows user to select a txt file to be encoded using our cipher
         /// </summary>
@@ -132,10 +140,17 @@ namespace CipherBreakerUWP
             picker.FileTypeFilter.Add(".txt");
 
             // Open file directory to choose a txt file
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            StorageFile file = await picker.PickSingleFileAsync();
             if (file != null)
             {
-                plainText = CipherUtility.LoadPlainText(file.Name);
+                try
+                {
+                    plainText = await FileIO.ReadTextAsync(file, 0);
+                }
+                catch
+                {
+                    plainText = "The text file that you have chosen is not utf encoded.";
+                }
             }
             else
             {
