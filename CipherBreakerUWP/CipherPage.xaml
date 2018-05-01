@@ -86,6 +86,7 @@
             Width="130"
             Background="LightGray"
             VerticalAlignment="Top"/>
+        <!-- Loads plain text from a file -->
         <Button 
             Content="Load Plain Text" 
             HorizontalAlignment="Left" 
@@ -93,6 +94,7 @@
             Width="130"
             Background="LightGray"
             VerticalAlignment="Top"/>
+        <!-- Saves encoded text to a file -->
         <Button 
             Content="Save Cipher Text" 
             HorizontalAlignment="Left" 
@@ -100,12 +102,12 @@
             Width="130"
             Background="LightGray"
             VerticalAlignment="Top"/>
+        <!-- Allows user to specify a file name -->
         <TextBox 
             HorizontalAlignment="Left" 
             Margin="520,676,0,0" 
             PlaceholderText="Type file name..." 
             VerticalAlignment="Top" 
             Width="130"/>
-
     </Grid>
 </Page>
