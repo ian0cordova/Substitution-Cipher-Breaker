@@ -153,6 +153,10 @@
       <Project>{3be6b3c6-4099-42d9-8b48-83b44f7223ca}</Project>
       <Name>CipherMaker</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CipherUtility\CipherUtility.csproj">
+      <Project>{b7a51bdc-a70d-4ad4-8977-35ab5ae2fa86}</Project>
+      <Name>CipherUtility</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -53,27 +53,27 @@
         <!-- Label for RichEditBox below -->
         <TextBlock 
             HorizontalAlignment="Left" 
-            Margin="385,150,0,-26" 
+            Margin="380,150,0,-26" 
             Text="Enter text to be translated here." 
             VerticalAlignment="Top"/>
         <!-- Field for user to enter text to be translated -->
         <RichEditBox      
             x:Name="rebPlainText"
             HorizontalAlignment="Left" 
-            Margin="384,170,0,0" 
+            Margin="380,170,0,0" 
             VerticalAlignment="Top" 
             Height="160" Width="300"/>
         <!-- Label for RichEditBox below -->
         <TextBlock 
             Text="Translation:" 
             HorizontalAlignment="Left" 
-            Margin="384,380,0,0" 
+            Margin="380,380,0,0" 
             VerticalAlignment="Top"/>
         <!-- Translation to cipher text shown here -->
         <RichEditBox 
             x:Name="rebCipherText"
             HorizontalAlignment="Left" 
-            Margin="384,400,0,0" 
+            Margin="380,400,0,0" 
             VerticalAlignment="Top"
             Height="160" Width="300"/>
         <!-- Translates plain text to current shown cipher -->
@@ -82,8 +82,30 @@
             Content="Translate" 
             Click="btnTranslate_Click"
             HorizontalAlignment="Left" 
-            Margin="384,604,0,0" 
+            Margin="380,604,0,0" 
+            Width="130"
             Background="LightGray"
             VerticalAlignment="Top"/>
+        <Button 
+            Content="Load Plain Text" 
+            HorizontalAlignment="Left" 
+            Margin="380,640,0,0" 
+            Width="130"
+            Background="LightGray"
+            VerticalAlignment="Top"/>
+        <Button 
+            Content="Save Cipher Text" 
+            HorizontalAlignment="Left" 
+            Margin="380,676,0,0" 
+            Width="130"
+            Background="LightGray"
+            VerticalAlignment="Top"/>
+        <TextBox 
+            HorizontalAlignment="Left" 
+            Margin="520,676,0,0" 
+            PlaceholderText="Type file name..." 
+            VerticalAlignment="Top" 
+            Width="130"/>
+
     </Grid>
 </Page>

@@ -3,7 +3,12 @@
 /// Senior Project
 
 using Cipher.CipherMaker;
+using Cipher.CipherUtility;
+
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -103,6 +108,40 @@ namespace CipherBreakerUWP
             rebCipherText.IsReadOnly = false;
             rebCipherText.Document.SetText(Windows.UI.Text.TextSetOptions.None, cipherText);
             rebCipherText.IsReadOnly = true;
+        }
+
+        /// <summary>
+        /// Allows user to select a txt file to be encoded using our cipher
+        /// </summary>
+        /// 
+        /// <returns>
+        /// string plainText which contains the contents of the specified txt file
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 7:25pm - 4/30/2018
+        /// </author>
+        private static async Task<string> SelectPlainTextFileAsync()
+        {
+            string plainText;
+
+            // Set parameters for opening a file
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.List;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            picker.FileTypeFilter.Add(".txt");
+
+            // Open file directory to choose a txt file
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                plainText = CipherUtility.LoadPlainText(file.Name);
+            }
+            else
+            {
+                plainText = "";
+            }
+            return plainText;
         }
     }
 }
