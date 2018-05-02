@@ -102,34 +102,109 @@ namespace Cipher.CipherSolver
                 string line;
 
                 // find specified number of nGrams
-                for(int i = 0; i < a_numberOfnGrams; ++i)
+                for(int i = 0; i < a_numberOfnGrams/2; ++i)
                 {
-                    string nGram = "";
-                    string nGramCount = "";
-                    int nGramCountNum;
                     // end of file
                     if ((line = sr.ReadLine()) == null) break;
-                    foreach(char ch in line)
-                    {
-                        if (ch == '[' || ch == ']' || ch == ' ') continue;
 
-                        // read n-gram
-                        else if(IsEnglishLetter(ch))
-                        {
-                            nGram += ch;
-                        }
-                        // read n-gram count
-                        else if(Char.IsNumber(ch))
-                        {
-                            nGramCount += ch;
-                        }
-                    }
-
-                    nGramCountNum = Int32.Parse(nGramCount);
-                    topnGrams.Add(nGram, nGramCountNum);
+                    Tuple<string, int> nGramData = ParseDataSetLine(line);
+                    topnGrams.Add(nGramData.Item1, nGramData.Item2);
                 }
             }
             return topnGrams;
+        }
+
+        /// <summary>
+        /// Gets random n-grams from the data set to populate the remaining parts of our chromosome
+        /// </summary>
+        /// 
+        /// <param name="a_numberOfnGrams"> total of n-grams needed to complete chromosome </param>
+        /// 
+        /// <returns>
+        /// Dictionary containing the random n-grams
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 1:00am, 5/2/2018
+        /// </author>
+        static Dictionary<string, int> GetRandomnGrams(int a_numberOfnGrams)
+        {
+            Dictionary<string, int> randomnGrams = new Dictionary<string, int>();
+
+            // generate random #s which will correspond to a random ngram in our dataset
+            Random rand = new Random();
+            List<int> randomLines = new List<int>();
+            for(int i = 0; i < a_numberOfnGrams/2; ++i)
+            {
+                randomLines.Add(rand.Next(a_numberOfnGrams / 2, 5000));
+            }
+            randomLines.Sort();
+
+            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetTriGrams.txt";
+
+            using (FileStream fs = File.Open(path, FileMode.Open))
+            using (BufferedStream bs = new BufferedStream(fs))
+            using (StreamReader sr = new StreamReader(bs))
+            {
+                // populate dictionary with random nGrams
+                for (int i = 0; i < a_numberOfnGrams; i++)
+                {
+                    string line;
+                    // eof
+                    if ((line = sr.ReadLine()) == null) break;
+                    // first half of a_numberofnGrams already used for topnGrams
+                    if (i < a_numberOfnGrams / 2) continue;
+                    // take data from random lines and store it to dictionary
+                    if (randomLines.Contains(i))
+                    {
+                        Tuple<string, int> nGramData = ParseDataSetLine(line);
+                        randomnGrams.Add(nGramData.Item1, nGramData.Item2);
+                    }
+
+                }
+            }
+            return randomnGrams;
+        }
+
+        /// <summary>
+        /// Helper method to parse the n-gram and count from the data set.
+        /// Format looks like [THE 12345] where THE is the n-gram and 12345 is the count
+        /// </summary>
+        /// 
+        /// <param name="a_line"> line to be parsed </param>
+        /// 
+        /// <returns>
+        /// Returns a tuple which is to be an entry in a dictionary
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 1:00am 5/2/2018
+        /// </author>
+        private static Tuple<string, int> ParseDataSetLine(string a_line)
+        {
+            string nGram = "";
+            string nGramCount = "";
+            int nGramCountNum;
+
+            foreach (char ch in a_line)
+            {
+                if (ch == '[' || ch == ']' || ch == ' ') continue;
+
+                // read n-gram
+                else if (IsEnglishLetter(ch))
+                {
+                    nGram += ch;
+                }
+                // read n-gram count
+                else if (Char.IsNumber(ch))
+                {
+                    nGramCount += ch;
+                }
+            }
+            nGramCountNum = Int32.Parse(nGramCount);
+
+            Tuple<string, int> nGramData = new Tuple<string, int>(nGram, nGramCountNum);
+            return nGramData;
         }
 
         /// <summary>
