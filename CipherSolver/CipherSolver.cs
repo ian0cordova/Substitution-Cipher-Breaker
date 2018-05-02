@@ -54,13 +54,22 @@ namespace Cipher.CipherSolver
 
             Dictionary<string, int> chromosome = new Dictionary<string, int>();
             Dictionary<string, int> cipherTriGrams = new Dictionary<string, int>();
-            Dictionary<string, int> dataSetTriGrams = new Dictionary<string, int>();
-
+            Dictionary<string, int> randTriGrams = new Dictionary<string, int>();
+ 
             // find all tri-grams for the cipher text
             cipherTriGrams = FindnGrams(3, cipherText);
 
-            // read all tri-grams from dataset
-            dataSetTriGrams = GetTopnGrams(cipherTriGrams.Count);
+            // get top tri-grams from dataset
+            chromosome = GetTopnGrams(cipherTriGrams.Count);
+
+            // get random tri-grams from dataset
+            randTriGrams = GetRandomnGrams(cipherTriGrams.Count);
+
+            // merge random trigrams into chromosome
+            foreach (var entry in randTriGrams)
+            {
+                chromosome[entry.Key] = entry.Value;
+            }
 
             // sort trigrams from cipher by frequency, highest to lowest
             cipherTriGrams = (from entry in cipherTriGrams orderby entry.Value descending select entry)
@@ -71,10 +80,12 @@ namespace Cipher.CipherSolver
                 Console.WriteLine(entry.Key + " : " + entry.Value);
             }
             Console.WriteLine('\n');
-
-            foreach (var entry in dataSetTriGrams)
+            int i = 0;
+            Console.WriteLine(cipherTriGrams.Count);
+            foreach (var entry in chromosome)
             {
-                Console.WriteLine(entry.Key + ':' + entry.Value);
+                i++;
+                Console.WriteLine(i + " " + entry.Key + ':' + entry.Value);
             }         
         }
 
@@ -146,21 +157,27 @@ namespace Cipher.CipherSolver
             using (BufferedStream bs = new BufferedStream(fs))
             using (StreamReader sr = new StreamReader(bs))
             {
+                int lineCount = 0;
                 // populate dictionary with random nGrams
                 for (int i = 0; i < a_numberOfnGrams; i++)
                 {
                     string line;
                     // eof
                     if ((line = sr.ReadLine()) == null) break;
+                    lineCount++;
                     // first half of a_numberofnGrams already used for topnGrams
                     if (i < a_numberOfnGrams / 2) continue;
                     // take data from random lines and store it to dictionary
-                    if (randomLines.Contains(i))
+                    if (randomLines.Contains(lineCount))
                     {
                         Tuple<string, int> nGramData = ParseDataSetLine(line);
                         randomnGrams.Add(nGramData.Item1, nGramData.Item2);
                     }
-
+                    // did not add value to dictionary
+                    else
+                    {
+                        --i;
+                    }
                 }
             }
             return randomnGrams;
