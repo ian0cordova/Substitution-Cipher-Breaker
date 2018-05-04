@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NetSpell" Version="2.1.7" />
+    <ProjectReference Include="..\CipherMaker\CipherMaker.csproj" />
   </ItemGroup>
 
 </Project>
