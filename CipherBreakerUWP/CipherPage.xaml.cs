@@ -3,7 +3,6 @@
 /// Senior Project
 
 using Cipher.CipherMaker;
-using Cipher.CipherUtility;
 
 using System;
 using System.Collections.Generic;
