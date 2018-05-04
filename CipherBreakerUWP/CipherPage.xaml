@@ -99,6 +99,7 @@
         <!-- Saves encoded text to a file -->
         <Button 
             Content="Save Cipher Text" 
+            Click="btnSaveCipherText_Click"
             HorizontalAlignment="Left" 
             Margin="736,528,0,0" 
             Width="130"

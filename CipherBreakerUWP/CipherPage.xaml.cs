@@ -111,6 +111,16 @@ namespace CipherBreakerUWP
             rebCipherText.IsReadOnly = true;
         }
 
+        /// <summary>
+        /// Loads text from a utf encoded .txt file
+        /// </summary>
+        /// 
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// 
+        /// <author>
+        /// Ian Cordova - 7:25pm - 4/30/2018
+        /// </author>
         private async void btnLoadText_Click(object sender, RoutedEventArgs e)
         {
             var plainText = await SelectPlainTextFileAsync();
@@ -156,6 +166,40 @@ namespace CipherBreakerUWP
                 plainText = "";
             }
             return plainText;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void btnSaveCipherText_Click(object sender, RoutedEventArgs e)
+        {
+            string cipherText;
+            rebCipherText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out cipherText);
+
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+            savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+
+            // Dropdown of file types the user can save the file as
+            savePicker.FileTypeChoices.Add("Plain Text", new List<string>() { ".txt" });
+            // Default file name if the user does not type one in or select a file to replace
+            savePicker.SuggestedFileName = "New Document";
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            if (file != null)
+            {
+                // Prevent updates to the remote version of the file until
+                // we finish making changes and call CompleteUpdatesAsync.
+                CachedFileManager.DeferUpdates(file);
+                // write to file
+                await FileIO.WriteTextAsync(file, cipherText);
+                // Let Windows know that we're finished changing the file so
+                // the other app can update the remote version of the file.
+                // Completing updates may require Windows to ask for user input.
+                Windows.Storage.Provider.FileUpdateStatus status =  await CachedFileManager.CompleteUpdatesAsync(file);
+
+            }
+
         }
     }
 }
