@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Cipher.CipherUtility
 {
@@ -14,71 +15,226 @@ namespace Cipher.CipherUtility
     public class CipherUtility
     {
         /// <summary>
-        /// Copies text from txt file to a string and sends it back to caller
+        /// Reads in all bi-grams and their frequency into a dictionary for use
         /// </summary>
         /// 
-        /// <param name="a_filePath"> name of file to be read </param>
-        /// 
         /// <returns>
-        /// string plainText which contains text from txt file
+        /// Dictionary containing bi-grams and their frequency from the training data
         /// </returns>
-        public static string LoadPlainText(string a_filePath)
+        /// 
+        /// <author>
+        /// Ian Cordova - 7:00pm 5/2/2018
+        /// </author>
+        public static Dictionary<string, int> GetTrainingBiGrams()
         {
-            string plainText = "";
+            Dictionary<string, int> trainingBiGrams = new Dictionary<string, int>();
+            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetBiGrams.txt";
 
-            using (FileStream fs = new FileStream("C:\\Users\\icordova\\Documents\\test.txt", FileMode.Open, FileAccess.Read))
-            using (StreamReader sr = new StreamReader(fs))
+            using (FileStream fs = File.Open(path, FileMode.Open))
+            using (BufferedStream bs = new BufferedStream(fs))
+            using (StreamReader sr = new StreamReader(bs))
             {
                 string line;
-                while((line = sr.ReadLine()) != null)
+
+                // read file and populate dict
+                while ((line = sr.ReadLine()) != null)
                 {
-                    plainText += line;
+                    Tuple<string, int> nGramData = ParseDataSetLine(line);
+                    trainingBiGrams.Add(nGramData.Item1, nGramData.Item2);
                 }
             }
-            return plainText;
+            return trainingBiGrams;
         }
 
         /// <summary>
-        /// Saves generated cipher text to a file.
+        /// Helper method to parse the n-gram and count from the data set.
+        /// Format looks like [THE 12345] where THE is the n-gram and 12345 is the count
         /// </summary>
         /// 
-        /// <param name="a_cipherText"> text to be saved </param>
-        /// <param name="a_filePath"> specified file path to save text </param>
-        /// 
-        /// <author>
-        /// Ian Cordova - 8:00pm, 4/30/2018
-        /// </author>
-        public static void SaveCipherText(string a_cipherText, string a_filePath = "")
-        {
-            if(a_filePath == "")
-            {
-                a_filePath = RandomString();
-            }
-            using (StreamWriter cipherText = new StreamWriter(a_filePath))
-            {
-                cipherText.WriteLine(a_cipherText);
-            }
-        }
-
-        /// <summary>
-        /// Creates a randomized string, i use this if a person doesn't specify a file name
-        /// used code from https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
-        /// </summary>
+        /// <param name="a_line"> line to be parsed </param>
         /// 
         /// <returns>
-        /// random 8 character long string
+        /// Returns a tuple which is to be an entry in a dictionary
         /// </returns>
         /// 
         /// <author>
-        /// User Iaika on StackOverFlow from above link
+        /// Ian Cordova - 1:00am 5/2/2018
         /// </author>
-        private static string RandomString()
+        public static Tuple<string, int> ParseDataSetLine(string a_line)
         {
-            Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, 8)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+            string nGram = "";
+            string nGramCount = "";
+            int nGramCountNum;
+
+            foreach (char ch in a_line)
+            {
+                if (ch == '[' || ch == ']' || ch == ' ') continue;
+
+                // read n-gram
+                else if (IsEnglishLetter(ch))
+                {
+                    nGram += ch;
+                }
+                // read n-gram count
+                else if (Char.IsNumber(ch))
+                {
+                    nGramCount += ch;
+                }
+            }
+            nGramCountNum = Int32.Parse(nGramCount);
+
+            Tuple<string, int> nGramData = new Tuple<string, int>(nGram, nGramCountNum);
+            return nGramData;
         }
 
+        /// <summary>
+        /// This is a method that is only called when creating our reference/training set of data.
+        /// ie it should be only called once, and not during normal project run time. This method
+        /// should probably be a separate entity in the form of a separate program or a script, but 
+        /// since it uses the same functionality that the main project does I am including it here 
+        /// to see everything that was done to achieve the finished result
+        /// </summary>
+        /// 
+        /// <returns>
+        /// void - but reads/writes to files
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 6:00pm 4/25/2018
+        /// </author>
+        private static void GetnGramsFromDataSet()
+        {
+            // dictionaries to store all n-grams and their number of occurances [n-gram, count]
+            Dictionary<string, int> bigrams = new Dictionary<string, int>();
+            Dictionary<string, int> trigrams = new Dictionary<string, int>();
+
+            // temporary storage for grams after they are found
+            List<string> grams = new List<string>();
+            string fullText = "";
+
+            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherUtility\\DataSet.csv";
+
+            using (FileStream fs = File.Open(path, FileMode.Open))
+            using (BufferedStream bs = new BufferedStream(fs))
+            using (StreamReader sr = new StreamReader(bs))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    line = line.ToUpper();
+                    fullText += line; // this is so ineffective and slow, but im lazy and only have to run this once
+                }
+
+                bigrams = FindnGrams(2, fullText);
+                //trigrams = FindnGrams(3, fullText);
+            }
+
+            // write dictionaries to files
+            using (StreamWriter biGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherUtility\\DataSetBigrams.txt"))
+            {
+                bigrams = (from entry in bigrams orderby entry.Value descending select entry)
+                    .ToDictionary(pair => pair.Key, pair => pair.Value);
+                foreach (var entry in bigrams)
+                {
+                    biGramFile.WriteLine("[{0} {1}]", entry.Key, entry.Value);
+                }
+            }
+            /*using (StreamWriter triGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetTrigrams.txt"))
+            {
+                trigrams = (from entry in trigrams orderby entry.Value descending select entry)
+                    .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                foreach (var entry in trigrams)
+                {
+                    triGramFile.WriteLine("[{0} {1}]", entry.Key, entry.Value);
+                }
+            }*/
+
+        }
+        /// <summary>
+        /// Finds all of the n-grams of a letter given a specific n value
+        /// </summary>
+        /// 
+        /// <param name="a_nlength"> specified length of n-grams </param>
+        /// <param name="a_word"> word to parse n-grams from </param>
+        /// 
+        /// <returns>
+        /// Returns list of n-grams in a list
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 9:30pm, 4/24/2018
+        /// </author>
+        public static Dictionary<string, int> FindnGrams(int a_nlength, string a_text)
+        {
+            // each n-gram will be stored in this dictionary
+            Dictionary<string, int> nGramDict = new Dictionary<string, int>();
+            string ngram;
+            string word = "";
+
+            // these pivots will determine each n-gram and we will shift them down the word
+            int pivot1 = 0;
+            int pivot2 = a_nlength;
+
+            for (int i = 0; i < a_text.Length; ++i)
+            {
+                // continue building word
+                if (IsEnglishLetter(a_text[i]))
+                {
+                    word += a_text[i];
+                    continue;
+                }
+                // reached end of word, now find n-grams
+                if ((!IsEnglishLetter(a_text[i]) || i == a_text.Length - 1) && (word != ""))
+                {
+                    pivot1 = 0;
+                    pivot2 = a_nlength;
+                    // iterate over the word, ends when pivot2 hits the end of the word
+                    while (pivot2 <= word.Length)
+                    {
+                        ngram = "";
+                        // add all letters between pivot1 and pivot2 to string
+                        for (int j = 0; j < a_nlength; ++j)
+                        {
+                            ngram += word[pivot1 + j];
+                        }
+                        // n-gram already exists in dictionary, increment count
+                        if (nGramDict.ContainsKey(ngram))
+                        {
+                            nGramDict[ngram]++;
+                        }
+                        // n-gram does not exist in dictionary, initialize count
+                        else
+                        {
+                            nGramDict[ngram] = 1;
+                        }
+                        // shift down one letter
+                        pivot1++;
+                        pivot2++;
+                    }
+                    word = "";
+                }
+            }
+            return nGramDict;
+        }
+
+        /// <summary>
+        /// Determines if the specified character is actually a letter
+        /// </summary>
+        /// 
+        /// <param name="a_character"> Single character to test </param>
+        /// 
+        /// <returns>
+        /// If char is an english letter return true, else false.
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 9:00pm, 4/24/2018
+        /// </author>
+        public static bool IsEnglishLetter(char a_character)
+        {
+            return ((a_character >= 'A' && a_character <= 'Z') || (a_character >= 'a' && a_character <= 'z'));
+        }
     }
 }
