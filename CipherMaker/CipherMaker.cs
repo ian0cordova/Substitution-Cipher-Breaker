@@ -41,17 +41,16 @@ namespace Cipher.CipherMaker
         {
             Dictionary<char, char> subCipher = new Dictionary<char, char>();
             Random rand = new Random();
+            string alphabet = m_Alphabet;
             int randLetter;
 
             // iterate through alphabet
             for(int i = 0; i < 26; ++i)
             {
                 // generate a random letter and check if it has already been used.
-                do randLetter = rand.Next(0, 26); while ((CipherContains(subCipher, m_Alphabet[randLetter])));
-                //randLetter = rand.Next(0, 25);
-                // assign random letter to next letter in alphabet
-                subCipher.Add(m_Alphabet[i], m_Alphabet[randLetter]);
-                Debug.WriteLine(subCipher[m_Alphabet[i]]);
+                randLetter = rand.Next(0, alphabet.Length);
+                subCipher.Add(alphabet[i], alphabet[randLetter]);
+                Debug.WriteLine(subCipher[alphabet[i]]);
             }
             return subCipher;
         } 
