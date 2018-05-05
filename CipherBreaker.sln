@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CipherMaker", "CipherMaker\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CipherSolver", "CipherSolver\CipherSolver.csproj", "{38FDE174-1E36-4E69-9236-40AF3BF6C869}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CipherUtility", "CipherUtility\CipherUtility.csproj", "{B7A51BDC-A70D-4AD4-8977-35AB5AE2FA86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CipherUtility", "CipherUtility\CipherUtility.csproj", "{B7A51BDC-A70D-4AD4-8977-35AB5AE2FA86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CipherTrainingData", "CipherTrainingData\CipherTrainingData.csproj", "{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,22 @@ Global
 		{B7A51BDC-A70D-4AD4-8977-35AB5AE2FA86}.Release|x64.Build.0 = Release|Any CPU
 		{B7A51BDC-A70D-4AD4-8977-35AB5AE2FA86}.Release|x86.ActiveCfg = Release|Any CPU
 		{B7A51BDC-A70D-4AD4-8977-35AB5AE2FA86}.Release|x86.Build.0 = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|x64.Build.0 = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Debug|x86.Build.0 = Debug|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|ARM.Build.0 = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|x64.ActiveCfg = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|x64.Build.0 = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|x86.ActiveCfg = Release|Any CPU
+		{BFFD8974-386F-45F9-B3C3-B52220E8BE3B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
