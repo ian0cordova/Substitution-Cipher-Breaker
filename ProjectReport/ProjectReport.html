@@ -1,0 +1,141 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <style type="text/css">
+      .indented {padding-left: 50pt; padding-right: 50pt;}
+    </style>
+  </head>
+  <body>
+    <h1>Single-Letter Substitution Cipher Breaker</h1>
+      <!-- Introduction to the Project including changes to initial plan and reasoning -->
+      <h2>Introduction to Project</h2>
+        <p>
+          I chose this topic for my Senior Project a number of reasons. Ciphers and decryption have always fascinated me for as long as I remember. In addition, I wanted to learn something new. The technologies and algorithm chosen for this project were the perfect blend of challenge and familiarity to allow a comfortable transition to the project while improving my skills as a software designer and programmer.
+        </p>
+        <p>
+          My plan for the project from the beginning varied from the final result. I made some changes to make the project flow better and also to steer away from some potentially unnecessary challenges. The original break down is as follows: 
+          <ul>
+            <li>
+              Implement User Interface using the Universal Windows Platform (UWP) using C#
+            </li>
+            <li>
+              Implement algorithm to decrypt a single-letter substitution cipher with a genetic algorithm. Written in C++ and exported to UWP project as a Dynamic Link Library.
+            </li>
+            <li>
+              Implement algorithm known as "Cipher Letter Mapping" in order to compare the two algorithms and prove that one is better than the other.
+            </li>
+            <li>
+              Write some python scripts for string manipulation, test cases, and result verification.
+            </li>
+          </ul>
+      </p>
+      <p>
+        When I actually started the project and realized that some things were easier and some things would be much more complicated, I realized I should shift my priorities around in order to accomplish as many useful features as possible for the application. Here is what I changed, and why I changed it.
+        <ul>
+          <li>
+            <p> 
+              <b>Change:</b> decided to write all of my code as C# projects.</p>
+            <p> 
+              <b>Reason:</b> Writing the .dll's in C++ was an unnecessary challenge. Despite being comfortable and familiar with the language, some things are just drastically trivial in C# such as exporting as a dll, many data structures and their functionality, as well as some object-oriented features as well.
+            </p>
+            <p>
+              Secondly, I found writing test scripts in Python to be far less enjoyable in the Windows environment than in a Unix environment. I also realized that many of the features that I was beginning to write in Python would be nice quality-of-life features to have implemented in the actual application itself. Despite Python being much easier to program with, having the features included in the finished project was much more satisfying at the end.
+            </p>
+          </li>
+          <li>
+            <p>
+              <b>Change:</b> Chose to implement a solution to the cipher in one manner.
+            </p>
+            <p>
+              <b>Reason:</b> I originally wanted to compare my genetic algorithm to something to prove (or disprove) its effectiveness. Genetic algorithms are great for solving NP problems, but are they the fastest? That is what I wanted to determine. 
+            </p>
+            <p>
+              After realizing that implementing the genetic algorithm was going to be much trickier than anticipated, I made the choice to scale the project back slightly in order to have a fully operational application.
+            </p>
+            <p>
+              The documentation that I found online on the topic of genetic algorithms in relation to this specific topic seemed to be very incomplete. Many sources I found lacked thorough explanation for key parts of the algorithm, and thus forced me to crowd source the knowledge from numerous sources in order to comprehend all of the complexities. I plan on giving as detailed as an explanation as I can give based on all of the information that I have accumulated.
+            </p>
+          </li>
+          <li>
+            <p>
+              <b>Change:</b> Included cipher generation as an additional feature to the application.
+            </p>
+            <p>
+              <b>Reason: </b>This may seem like an obvious feature to have when creating a tool like this, however I did not initially plan on having a feature which allowed the user to randomly create their own ciphers. After writing almost all of the code for this feature initially in Python, it made more sense to just incorporate it into the final project and allow the application to complete both aspects of the encryption.
+            </p>
+          </li>
+        </ul>
+      </p>
+      <p>
+        While I have had the opportunity to worth with C# in the past, it was not in this capacity. My experience was with creating a web applicaton. Being able to use C# for a somewhat complex algorithm as well as UWP really cemented my knowledge and comfort in the language. UWP also uses XAML as their formatting language which was considerably simple to use and to create an aesthetic application. From my experience it was far easier than formatting a design on Android or even HTML. 
+      </p>
+      <p>
+        In addition to UWP, I learned a great deal about genetic algorithms. I had barely ever dabbled in Machine Learning before, so having the opportunity to go all in and write an algorithm such as this ended up being a lot to take on. By the end of it, however, I feel confident in my knowledge enough that I could approach using a genetic algorithm for other applications as well.
+      </p>
+      <h2>Installation Instructions</h2>
+        <p>
+          In Progress
+        </p>
+      <h2>User's Manual</h2>
+        <p>
+          For this User's Manual, I will give a broad explanation of each feature and how to properly use the aforementioned feature. As features are added, this section will updated accordingly.
+        </p>
+        <img src="images/createACipher.png" width="50%">
+        <p>
+          <b>1. Generate a single-letter substitution cipher key:</b>
+          When the application loads there are two buttons. Click on the button that reads "Create a Cipher."
+          <p class="indented"> <img src="images/createCipherPage.png" width="75%"></p>
+          <p class="indented"><b>A. Generate button:</b> Click here to generate a newly randomized cipher key. Feel free to keep clicking til you get one you like! </p>
+          <p class="indented"><b>B. Manually enter plain text to be ciphered:</b> If you would like to manually type or copy-paste text in to this field, be my guest. Note: Punctuation and capitalization are ignored during enryption. </p>
+          <p class="indented"><b>C. Translate text using the generated cipher key:</b> Click this button to see the text entered above be encryted into cipher text using the cipher key that you generated. If you did not generate a cipher key prior to clicking this button you will receive an error message that tells you to generate a key first.</p>
+          <p class="indented"><b>D. Load plain text from a file:</b> If you would like to enter alot of text into the field by loading the text from a saved file you can click this button in order to choose your saved file. Note that .txt files must be coded to utf-8 and not ANSI. If you attempt to load an ANSI saved file you will receive an error message in the text box (Which you can encrypt if you would like! Fun right?)</p>
+          <p class="indented"><b>E. Translation appears here:</b> The result of your encrypted text appears in this text box.</p>
+          <p class="indented"><b>F. Save the encrypted text to a file: </b> Once you have successfully encrypted your plain text you can now save it to a file to reference later or to save to send your manifesto to the police or something. </p>
+          <p class="indented"><b>G. Type your own file name: </b> Enter the file name that you would like to save your cipher text as.
+       </p>
+       <p>
+        <b>2. Decipher existing encrypted text:</b>
+        When the application loads there are two buttons. Click on the button that reads "Decipher Text."
+          <p class="indented"> Next image will go here.</p>
+          <p class="indented"><b>This page has not been designed yet.</b> </p>
+       </p>
+      <h2>Design Document</h2>
+        <h4>Project Design Overview</h4>
+        <p> The entirety of the solution has been broken up into 5 main parts. Each file contains one class, so I will explain the primary functionality of each file and each project that is a part of the entire solution.</p>
+        <p><b>CipherBreakerUWP</b></p>        
+        <p>
+            This is the main entry point to the application. Every other part of the entire solution is referenced from here in order to solve a problem and display it on the screen.
+        </p>
+        <p class="indented">
+            <i>MainPage.xaml / MainPage.xaml.cs</i> : this is the homepage for the application. From here we can access the other pages and that's it.
+        </p>
+        <img class="indented" src="images/projectOverview.png">
+        <p class="indented">
+            <i>CipherPage.xaml / CipherPage.xaml.cs</i> : this is the page where the creation of a cipher happens. This page contains a number of RichEditBoxes, Buttons, and TextBlocks. Each of the components is hooked up to specific functionality in the .cs page which allows us to call the CipherMaker library.
+        </p>
+        <img class="indented" src="images/cipherPageOverview.png" width="50%">
+        <p class="indented">
+          <i>DecipherPage.xaml / DecipherPage.xaml.cs</i> : this page is where the user can load or enter cipher text and call the genetic algorithm (called from CipherSolver library) in order to decipher the text with as much accuracy as possible.
+        </p>
+        <p class="indented">image goes here.</p>
+
+        <p><b>CipherMaker</b></p>
+        <p>
+          This class handles the creation of cipher keys and the translation of plain text to cipher text.
+        </p>
+        <p>
+          Notable data structures: Dictionary&#60;char, char&#62; - this data structure is used throughout the entirety of the project as a cipher key. It is a mapping of the alphabet A-Z to random unique characters A-Z. Somtimes a letter will map to itself, but most likely it will map to a completely random letter.
+        </p>
+        <img src="images/cipherMakerOverview.png">
+
+        <p><b>CipherSolver</b></p>
+        <p> 
+          This class has one function and that is to read cipher text and do its best to return plain text by using a genetic algorithm. Here I will explain the algorithm and the design for this feature.
+
+        </p>
+        <p><b>CipherTrainingData</b></p>
+
+      <h2>Summary and Conclusion</h2>
+      <h2>Bibliography</h2>
+  </body>
+</html>

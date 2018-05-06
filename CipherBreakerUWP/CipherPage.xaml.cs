@@ -29,6 +29,7 @@ namespace CipherBreakerUWP
         {
             InitializeComponent();
             m_currentCipher = new Dictionary<char, char>();
+            rebCipherText.IsReadOnly = true;
         }
 
         /// <summary>
@@ -132,6 +133,7 @@ namespace CipherBreakerUWP
         /// </summary>
         /// 
         /// <returns>
+        /// string plainText which contains the contents of the specified txt file
         /// string plainText which contains the contents of the specified txt file
         /// </returns>
         /// 

@@ -7,20 +7,28 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Cipher.CipherMaker;
 
 namespace Cipher.CipherSolver
 {
+    using Cipher.CipherUtility;
+    using System.Diagnostics;
+
     /// <summary>
     /// Handles the deciphering of encoded text
     /// </summary>
-    class CipherSolver
+    public class CipherSolver
     {
-        // remove this after testing
-        static void Main(string[] args)
+        /// <summary>
+        /// Entry point to this class. Runs the genetic algorithm
+        /// </summary>
+        /// <param name="a_cipherText"></param>
+        /// <returns></returns>
+        public static string Decrypt(Dictionary<string, int> a_trainingData, string a_cipherText = "")
         {
-            string cipherText = File.ReadAllText("C:\\Users\\icordova\\Documents\\cipherText.txt");
-            Dictionary<char, char> solution = new Dictionary<char, char>()
+            if (a_cipherText == "") return "";
+            string cipherText = a_cipherText; 
+            // File.ReadAllText("C:\\Users\\icordova\\Documents\\cipherText.txt");
+            /* Dictionary<char, char> solution = new Dictionary<char, char>()
             {
                 {'A', 'Y' },
                 {'B', 'S' },
@@ -48,33 +56,35 @@ namespace Cipher.CipherSolver
                 {'X', 'B' },
                 {'Y', 'J' },
                 {'Z', 'X' }
-            };
+            };*/
             // possibly read training data set into memory here or as a private member
-            Dictionary<string, int> dataSetBiGrams = GetTrainingBiGrams();
+            Dictionary<string, int> dataSetBiGrams = new Dictionary<string, int> (a_trainingData);
 
             // generate initial population of chromosomes/guesses at a solution
             List<Dictionary<char, char>> population = new List<Dictionary<char, char>>();
-            for(int i = 0; i < POPULATION_SIZE; ++i)
+            for (int i = 0; i < POPULATION_SIZE; ++i)
             {
                 population.Add(GenerateChromosome(cipherText, dataSetBiGrams));
             }
-                
+
             int lastScore = 0;
             int lastScoreIncrease = 0;
             int iterations = -STABILITY_INTERVALS;
 
             // begin genetic algorithm - iterate through generations of populations of chromosomes
-            while(lastScoreIncrease < STABILITY_INTERVALS)
+            while (lastScoreIncrease < STABILITY_INTERVALS)
             {
                 // breed/mutate next generation
                 population = NextGeneration(population);
 
+                // select most fit chromosomes from population
                 var topChromosomes = SelectTopChromosomes(population, cipherText, dataSetBiGrams);
                 var bestScore = topChromosomes.Item2;
                 Console.WriteLine(bestScore);
                 population = topChromosomes.Item1;
 
-                if(bestScore > lastScore)
+                // if the score improved use new score.
+                if (bestScore > lastScore)
                 {
                     lastScoreIncrease = 0;
                     lastScore = bestScore;
@@ -86,99 +96,36 @@ namespace Cipher.CipherSolver
                 iterations += 1;
             }
 
+            // print results
             Console.WriteLine("Best solution found after {0} iterations", iterations);
             Console.WriteLine(DecodeText(cipherText, population[0]));
-            foreach(var entry in population[0])
+            foreach (var entry in population[0])
             {
                 Console.WriteLine(entry.Key + " : " + entry.Value);
             }
 
             double accuracy = 0;
-            foreach(var entry in solution)
+            /*foreach (var entry in solution)
             {
-                if (population[0].ContainsKey(entry.Key) && population[0][entry.Key] == entry.Value) 
+                if (population[0].ContainsKey(entry.Key) && population[0][entry.Key] == entry.Value)
                 {
                     accuracy++;
                 }
-            }
+            }*/
             Console.WriteLine("Letters correct: " + accuracy);
 
-
-
-
-            /*string text_txt = File.ReadAllText("C:\\Users\\icordova\\Documents\\test.txt");
-
-            Dictionary<string, int> ngrams = new Dictionary<string, int>(FindnGrams(2, text_txt));
-            ngrams = (from entry in ngrams orderby entry.Value descending select entry)
-  .ToDictionary(pair => pair.Key, pair => pair.Value);
-            foreach (var entry in ngrams)
-            {
-                Console.WriteLine(entry.Key + " : " + entry.Value);
-            }*/
-
-            Console.ReadLine();
+            string decodedText = DecodeText(cipherText, population[0]);
+            Debug.WriteLine(decodedText);
+            return decodedText;
         }
 
+        // Constant values which determine information about the genetic algorithm
         private const string m_Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const int POPULATION_SIZE = 500;
         private const int TOP_POPULATION = 75;
         private const int STABILITY_INTERVALS = 10;
         private const int CROSSOVER_COUNT = 1;
         private const int MUTATIONS_COUNT = 1;
-
-        /// <summary>
-        /// Generates the starting chromosome for the genetic algorithm.
-        /// Uses the top tri grams from the cipher text and gets the top few trigrams and some random 
-        /// trigrams from the data set to use as the initial chromosome.
-        /// </summary>
-        /// 
-        /// <returns>
-        /// void
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 11:00pm, 4/29/2018 
-        /// </author>
-        /*static void GenerateInitialChromosome()
-        {
-            string cipherText = "NQMWTRN YP WTOKMYO E FEOKVQ OMML E OMJJ MR IVR ERB CYQOTX FEZTJA JTFVXOAJV ERB FYOYQV IVTRN TR ER VRGTQMRZVRO OKEO WEX MRJA PEQOTEJJA XYPPMQOTGV KEJOVB OKVTQ CQTOTCEJ BVGVJMPZVRO OKVTQ FEOKVQ WMYJBRO XYPPMQO OKV CKTJBQVR EFOVQ KTX XVPEQEOTMR WTOK XMRAE IVRRTV CMYJBRO YRBVQXOERB WKA XMZVMRV OKEO JMGVX KTZ WMYJBRO PQMGTBV ZMRVA FMQ FMMB ER VTNKO AVEQ MJB CKTJB XKMYJB RMO IV CMRCVQRVB WTOK MQ KEGV OM WMQQA EIMYO FTRERCTEJ TRDYTQTVX RMO IVTRN XYPPJTVB WTOK VRMYNK VEQRTRN OM QVXTBV TR OKVTQ MQTNTREJ KMYXTRN OKV CEQXMRX WVQV QVDYTQVB OM ZMGV FQMZ BVOQMTO OM IMXOMR OKVA ZMGVB TR WTOK HVER ERB WTJJTEZ EGVQA XMRAEX MJBVQ XTXOVQ ERB IQMOKVQ TR JEW TO WEXRO E RMQZEJ MQ TBVEJ JTGTRN XTOYEOTMR IYO TO WEX OKV XVRXV MF FEZTJA YRTOA";
-
-            Dictionary<string, int> chromosome = new Dictionary<string, int>();
-            Dictionary<string, int> cipherTriGrams = new Dictionary<string, int>();
-            Dictionary<string, int> randTriGrams = new Dictionary<string, int>();
- 
-            // find all tri-grams for the cipher text
-            cipherTriGrams = FindnGrams(3, cipherText);
-
-            // get top tri-grams from dataset
-            chromosome = GetTopnGrams(cipherTriGrams.Count);
-
-            // get random tri-grams from dataset
-            randTriGrams = GetRandomnGrams(cipherTriGrams.Count);
-
-            // merge random trigrams into chromosome
-            foreach (var entry in randTriGrams)
-            {
-                chromosome[entry.Key] = entry.Value;
-            }
-
-            // sort trigrams from cipher by frequency, highest to lowest
-            cipherTriGrams = (from entry in cipherTriGrams orderby entry.Value descending select entry)
-              .ToDictionary(pair => pair.Key, pair => pair.Value);
-
-            foreach (var entry in cipherTriGrams)
-            {
-                Console.WriteLine(entry.Key + " : " + entry.Value);
-            }
-            Console.WriteLine('\n');
-            int i = 0;
-            Console.WriteLine(cipherTriGrams.Count);
-            foreach (var entry in chromosome)
-            {
-                i++;
-                Console.WriteLine(i + " " + entry.Key + ':' + entry.Value);
-            }         
-        } */
 
         /// <summary>
         /// Generates an initial chromosome to compare against our frequency data.
@@ -196,7 +143,7 @@ namespace Cipher.CipherSolver
         private static Dictionary<char, char> GenerateChromosome(string a_cipherText, Dictionary<string, int> a_dataSet)
         {
             Dictionary<char, char> initialChromosome = new Dictionary<char, char>();
-            Dictionary<string, int> cipherTextBiGrams = new Dictionary<string, int>(FindnGrams(2, a_cipherText));
+            Dictionary<string, int> cipherTextBiGrams = new Dictionary<string, int>(CipherUtility.FindnGrams(2, a_cipherText));
             List<char> alphabet = new List<char>(m_Alphabet);
 
             HashSet<char> topCipherTextChars = new HashSet<char>(GetCommonLetters(cipherTextBiGrams));
@@ -206,7 +153,7 @@ namespace Cipher.CipherSolver
             int randLetter;
 
             // fill in chromosome with most likely possibilites
-            foreach(var letter in topCipherTextChars)
+            foreach (var letter in topCipherTextChars)
             {
                 randLetter = rand.Next(0, topChars.Count() - 1);
                 initialChromosome.Add(letter, topChars[randLetter]);
@@ -215,12 +162,12 @@ namespace Cipher.CipherSolver
             }
 
             // fill in rest of chromosome
-            for(int i = 0; i < 26;)
+            for (int i = 0; i < 26;)
             {
                 randLetter = rand.Next(0, alphabet.Count);
 
                 // already have this key
-                if(initialChromosome.ContainsKey(m_Alphabet[i]))
+                if (initialChromosome.ContainsKey(m_Alphabet[i]))
                 {
                     i++;
                     continue;
@@ -238,16 +185,31 @@ namespace Cipher.CipherSolver
                     i++;
                 }
             }
-            
+
             return initialChromosome;
         }
 
+        /// <summary>
+        /// This method gets the most common characters from a set of n-grams. This is used to build
+        /// our initial chromosome since the most frequently used characters will tend to match up between
+        /// sets of data.
+        /// </summary>
+        /// 
+        /// <param name="a_ngramFrequencies"> data of n-grams where string is the n-gram and int is the number of occurences </param>
+        /// 
+        /// <returns>
+        /// A set of the top 10 most frequently used characters
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova 11:00pm, 5/4/2018
+        /// </author>
         private static HashSet<char> GetCommonLetters(Dictionary<string, int> a_ngramFrequencies)
         {
             HashSet<char> commonChars = new HashSet<char>();
 
             // add values to hashset which forces uniqueness
-            foreach(var entry in a_ngramFrequencies)
+            foreach (var entry in a_ngramFrequencies)
             {
                 // save up to 10 of the top letters to use
                 if (commonChars.Count >= 10) break;
@@ -259,47 +221,6 @@ namespace Cipher.CipherSolver
 
             return commonChars;
         }
-
-        /// <summary>
-        /// Updates chromosome by switching values between parents or introducing
-        /// a random value (or mutation) to the mix in order to change the chromosome
-        /// </summary>
-        /// 
-        /// <param name="a_chromosome"> character mapping/potential solution </param>
-        /// <param name="a_charX"> value from parentX to switch </param>
-        /// <param name="a_charY"> value from parentY to switch (or a random value if mutating) </param>
-        /// 
-        /// <returns>
-        /// Newly formed child chromosome
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 3:30am, 5/3/2018
-        /// </author>
-        /*private static Dictionary<char, char> UpdateChromosome(Dictionary<char, char> a_chromosome, char a_charX, char a_charY) 
-        {
-            Dictionary<char, char> updatedChromosome = a_chromosome;
-
-            char current_charX = a_chromosome[a_charY];
-            char current_charY = a_chromosome[a_charX];
-
-            if (current_charX == a_charY)
-            {
-                current_charX = current_charY;
-            }
-            else if (current_charY == a_charX)
-            {
-                current_charY = current_charX;
-            }
-
-            updatedChromosome[current_charX] = current_charY;
-            updatedChromosome[current_charY] = current_charX;
-
-            updatedChromosome[a_charX] = a_charY;
-            updatedChromosome[a_charY] = a_charX;
-            
-            return updatedChromosome;
-        }*/
 
         /// <summary>
         /// Takes two random items from parentX and fills in the rest of the places from parentY
@@ -319,7 +240,7 @@ namespace Cipher.CipherSolver
         private static Dictionary<char, char> Crossover(Dictionary<char, char> parentX, Dictionary<char, char> parentY)
         {
             Random rand = new Random();
-            string alphabet = m_Alphabet;
+            //string alphabet = m_Alphabet;
             int randLetter;
             Dictionary<char, char> child = new Dictionary<char, char>();
             KeyValuePair<char, char> gene;
@@ -329,7 +250,7 @@ namespace Cipher.CipherSolver
             // get at least random keys from parentX and add entries to child
             foreach (var entry in parentX)
             {
-                if(i == randLetter)
+                if (i == randLetter)
                 {
                     gene = entry;
                     child.Add(gene.Key, gene.Value);
@@ -338,15 +259,13 @@ namespace Cipher.CipherSolver
                 ++i;
             }
 
-
             // fill child with rest of entries from parentY
-            foreach(var entry in parentY)
+            foreach (var entry in parentY)
             {
                 if (child.ContainsKey(entry.Key)) continue;
                 child.Add(entry.Key, entry.Value);
             }
-            child = (from entry in child orderby entry.Key ascending select entry)
-    .ToDictionary(pair => pair.Key, pair => pair.Value);
+            child = (from entry in child orderby entry.Key ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
             return child;
         }
 
@@ -369,14 +288,14 @@ namespace Cipher.CipherSolver
 
             // find unrepresented characters
             string unrepresentedChars = "";
-            foreach(char c in m_Alphabet)
+            foreach (char c in m_Alphabet)
             {
                 if (mutatedChild.ContainsValue(c)) continue;
                 unrepresentedChars += c;
             }
 
             // unrepresented characters means there are duplicates
-            if(unrepresentedChars != "")
+            if (unrepresentedChars != "")
             {
                 // find duplicate values
                 var duplicates = mutatedChild.GroupBy(x => x.Value).Where(x => x.Count() > 1);
@@ -422,7 +341,7 @@ namespace Cipher.CipherSolver
 
             Random rand = new Random();
 
-             while(newPopulation.Count < POPULATION_SIZE)
+            while (newPopulation.Count < POPULATION_SIZE)
             {
                 // randomly select two parent solutions
                 var parentX = new Dictionary<char, char>(a_population[rand.Next(a_population.Count)]);
@@ -432,20 +351,20 @@ namespace Cipher.CipherSolver
                 var child = new Dictionary<char, char>();
 
                 // switch chromosomes between parents
-                for(int i = 0; i < CROSSOVER_COUNT; ++i)
+                for (int i = 0; i < CROSSOVER_COUNT; ++i)
                 {
                     child = Crossover(parentX, parentY);
                 }
 
                 // randomly mutate chromosomes from child
-                for(int i = 0; i < MUTATIONS_COUNT; ++i)
+                for (int i = 0; i < MUTATIONS_COUNT; ++i)
                 {
                     child = Mutation(child);
                 }
 
                 newPopulation.Add(child);
             }
-    
+
             return newPopulation;
         }
 
@@ -469,10 +388,10 @@ namespace Cipher.CipherSolver
         static private Tuple<List<Dictionary<char, char>>, int> SelectTopChromosomes(List<Dictionary<char, char>> a_population, string a_cipherText, Dictionary<string, int> a_dataSetnGrams)
         {
             // this is ugly but its just a Dictionary of chromosomes and their respective scores
-            var chromosomeScores = new Dictionary<Dictionary<char, char>, int>();  
+            var chromosomeScores = new Dictionary<Dictionary<char, char>, int>();
 
             // calculate score of each chromosome
-            foreach(var chromosome in a_population)
+            foreach (var chromosome in a_population)
             {
                 chromosomeScores.Add(chromosome, ScoreChromosome(DecodeText(a_cipherText, chromosome), a_dataSetnGrams));
             }
@@ -485,9 +404,9 @@ namespace Cipher.CipherSolver
             var topScores = new List<Dictionary<char, char>>();
 
             int i = 0;
-            foreach(var entry in chromosomeScores)
+            foreach (var entry in chromosomeScores)
             {
-  
+
                 if (i > TOP_POPULATION) break;
                 i++;
                 topScores.Add(entry.Key);
@@ -515,12 +434,12 @@ namespace Cipher.CipherSolver
         static private int ScoreChromosome(string a_decodedText, Dictionary<string, int> a_dataSetnGrams)
         {
             double score = 0;
-            Dictionary<string, int> decodedTextBiGrams = FindnGrams(2, a_decodedText);
+            Dictionary<string, int> decodedTextBiGrams = CipherUtility.FindnGrams(2, a_decodedText);
 
             // rate each entry and add all of them together to score the chromosome as a whole
-            foreach(var entry in decodedTextBiGrams)
+            foreach (var entry in decodedTextBiGrams)
             {
-                if(a_dataSetnGrams.ContainsKey(entry.Key))
+                if (a_dataSetnGrams.ContainsKey(entry.Key))
                 {
                     score += entry.Value * Math.Log(a_dataSetnGrams[entry.Key], 2);
                 }
@@ -548,46 +467,19 @@ namespace Cipher.CipherSolver
             string decodedText = "";
             //Console.Clear();
             // decode text using cipher
-            foreach(char i in a_encodedText)
+            foreach (char i in a_encodedText)
             {
+                if(i == ' ' || i == '\n' || i == '\t')
+                {
+                    decodedText += i;
+                    continue;
+                }
                 // Get the key of the specified value
                 char key = a_cipher.FirstOrDefault(x => x.Value == i).Key;
                 decodedText += key;
             }
             //Console.WriteLine(decodedText);
             return decodedText;
-        }
-
-        /// <summary>
-        /// Reads in all bi-grams and their frequency into a dictionary for use
-        /// </summary>
-        /// 
-        /// <returns>
-        /// Dictionary containing bi-grams and their frequency from the training data
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 7:00pm 5/2/2018
-        /// </author>
-        static private Dictionary<string, int> GetTrainingBiGrams()
-        {
-            Dictionary<string, int> trainingBiGrams = new Dictionary<string, int>();
-            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetBiGrams.txt";
-
-            using (FileStream fs = File.Open(path, FileMode.Open))
-            using (BufferedStream bs = new BufferedStream(fs))
-            using (StreamReader sr = new StreamReader(bs))
-            {
-                string line;
-
-                // read file and populate dict
-                while ((line = sr.ReadLine()) != null)
-                {
-                    Tuple<string, int> nGramData = ParseDataSetLine(line);
-                    trainingBiGrams.Add(nGramData.Item1, nGramData.Item2);
-                }
-            }
-            return trainingBiGrams;
         }
 
         /// <summary>
@@ -605,7 +497,7 @@ namespace Cipher.CipherSolver
         {
             Dictionary<string, int> topnGrams = new Dictionary<string, int>();
 
-            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetTriGrams.txt";
+            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherTrainingData\\DataSetTriGrams.txt";
 
             using (FileStream fs = File.Open(path, FileMode.Open))
             using (BufferedStream bs = new BufferedStream(fs))
@@ -614,246 +506,16 @@ namespace Cipher.CipherSolver
                 string line;
 
                 // find specified number of nGrams
-                for(int i = 0; i < a_numberOfnGrams/2; ++i)
+                for (int i = 0; i < a_numberOfnGrams / 2; ++i)
                 {
                     // end of file
                     if ((line = sr.ReadLine()) == null) break;
 
-                    Tuple<string, int> nGramData = ParseDataSetLine(line);
+                    Tuple<string, int> nGramData = CipherUtility.ParseDataSetLine(line);
                     topnGrams.Add(nGramData.Item1, nGramData.Item2);
                 }
             }
             return topnGrams;
         }
-
-        /// <summary>
-        /// Gets random n-grams from the data set to populate the remaining parts of our chromosome
-        /// </summary>
-        /// 
-        /// <param name="a_numberOfnGrams"> total of n-grams needed to complete chromosome </param>
-        /// 
-        /// <returns>
-        /// Dictionary containing the random n-grams
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 1:00am, 5/2/2018
-        /// </author>
-        static Dictionary<string, int> GetRandomnGrams(int a_numberOfnGrams)
-        {
-            Dictionary<string, int> randomnGrams = new Dictionary<string, int>();
-
-            // generate random #s which will correspond to a random ngram in our dataset
-            Random rand = new Random();
-            List<int> randomLines = new List<int>();
-            for(int i = 0; i < a_numberOfnGrams/2; ++i)
-            {
-                randomLines.Add(rand.Next(a_numberOfnGrams / 2, 5000));
-            }
-            randomLines.Sort();
-
-            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetTriGrams.txt";
-
-            using (FileStream fs = File.Open(path, FileMode.Open))
-            using (BufferedStream bs = new BufferedStream(fs))
-            using (StreamReader sr = new StreamReader(bs))
-            {
-                int lineCount = 0;
-                // populate dictionary with random nGrams
-                for (int i = 0; i < a_numberOfnGrams; i++)
-                {
-                    string line;
-
-                    // eof
-                    if ((line = sr.ReadLine()) == null) break;
-                    lineCount++;
-
-                    // first half of a_numberofnGrams already used for topnGrams
-                    if (i < a_numberOfnGrams / 2) continue;
-
-                    // take data from random lines and store it to dictionary
-                    if (randomLines.Contains(lineCount))
-                    {
-                        Tuple<string, int> nGramData = ParseDataSetLine(line);
-                        randomnGrams.Add(nGramData.Item1, nGramData.Item2);
-                    }
-                    // did not add value to dictionary
-                    else
-                    {
-                        --i;
-                    }
-                }
-            }
-            return randomnGrams;
-        }
-
-        /// <summary>
-        /// Helper method to parse the n-gram and count from the data set.
-        /// Format looks like [THE 12345] where THE is the n-gram and 12345 is the count
-        /// </summary>
-        /// 
-        /// <param name="a_line"> line to be parsed </param>
-        /// 
-        /// <returns>
-        /// Returns a tuple which is to be an entry in a dictionary
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 1:00am 5/2/2018
-        /// </author>
-        private static Tuple<string, int> ParseDataSetLine(string a_line)
-        {
-            string nGram = "";
-            string nGramCount = "";
-            int nGramCountNum;
-
-            foreach (char ch in a_line)
-            {
-                if (ch == '[' || ch == ']' || ch == ' ') continue;
-
-                // read n-gram
-                else if (IsEnglishLetter(ch))
-                {
-                    nGram += ch;
-                }
-                // read n-gram count
-                else if (Char.IsNumber(ch))
-                {
-                    nGramCount += ch;
-                }
-            }
-            nGramCountNum = Int32.Parse(nGramCount);
-
-            Tuple<string, int> nGramData = new Tuple<string, int>(nGram, nGramCountNum);
-            return nGramData;
-        }
-
-        /// <summary>
-        /// Finds all possible n-grams in the word
-        /// </summary>
-        /// 
-        /// <param name="a_word"> word which will be parsed into n-grams </param>
-        /// 
-        /// <returns>
-        /// List of Lists of strings - each list contains a list of strings which are the n-grams for that length
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 9:40pm, 4/24/2018
-        /// </author>
-        /*private static List<List<string>> FindAllnGrams(string a_word)
-        {
-            List<List<string>> allnGrams = new List<List<string>>();
-            for(int i = 2; i < a_word.Length; ++i)
-            {
-                allnGrams.Add(FindnGrams(i, a_word));
-            }
-
-            return allnGrams;
-        }*/
-        /// <summary>
-        /// Finds all of the n-grams of a letter given a specific n value
-        /// </summary>
-        /// 
-        /// <param name="a_nlength"> specified length of n-grams </param>
-        /// <param name="a_word"> word to parse n-grams from </param>
-        /// 
-        /// <returns>
-        /// Returns list of n-grams in a list
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 9:30pm, 4/24/2018
-        /// </author>
-        private static Dictionary<string, int> FindnGrams(int a_nlength, string a_text)
-        {
-            // each n-gram will be stored in this dictionary
-            Dictionary<string, int> nGramDict = new Dictionary<string, int>();
-            string ngram;
-            string word = "";
-
-            // these pivots will determine each n-gram and we will shift them down the word
-            int pivot1 = 0;
-            int pivot2 = a_nlength;
-
-            for(int i = 0; i < a_text.Length; ++i)
-            {
-                // continue building word
-                if (IsEnglishLetter(a_text[i]))
-                {
-                    word += a_text[i];
-                    continue;
-                }
-                // reached end of word, now find n-grams
-                if ((!IsEnglishLetter(a_text[i]) || i == a_text.Length - 1) && (word != ""))
-                {
-                    pivot1 = 0;
-                    pivot2 = a_nlength;
-                    // iterate over the word, ends when pivot2 hits the end of the word
-                    while (pivot2 <= word.Length)
-                    {
-                        ngram = "";
-                        // add all letters between pivot1 and pivot2 to string
-                        for (int j = 0; j < a_nlength; ++j)
-                        {
-                            ngram += word[pivot1 + j];
-                        }
-                        // n-gram already exists in dictionary, increment count
-                        if (nGramDict.ContainsKey(ngram))
-                        {
-                            nGramDict[ngram]++;
-                        }
-                        // n-gram does not exist in dictionary, initialize count
-                        else
-                        {
-                            nGramDict[ngram] = 1;
-                        }
-                        // shift down one letter
-                        pivot1++;
-                        pivot2++;
-                    }
-                    word = "";
-                }
-            }
-            return nGramDict;
-        }
-
-        /// <summary>
-        /// Determines if the specified character is actually a letter
-        /// </summary>
-        /// 
-        /// <param name="a_character"> Single character to test </param>
-        /// 
-        /// <returns>
-        /// If char is an english letter return true, else false.
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 9:00pm, 4/24/2018
-        /// </author>
-        private static bool IsEnglishLetter(char a_character)
-        {
-            return ((a_character >= 'A' && a_character <= 'Z') || (a_character >= 'a' && a_character <= 'z'));
-        }
-
-
-
-        /*
-        static void RemoveLineEndings()
-        {
-            using (StreamWriter newdata = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSet2.csv"))
-            using (FileStream fs = new FileStream("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSet.csv", FileMode.Open))
-            using (StreamReader sr = new StreamReader(fs))
-            using (StreamWriter sw = new StreamWriter(fs))
-            {
-                string line;
-                while((line = sr.ReadLine()) != null)
-                {
-                    {
-                        newdata.WriteLine(Regex.Replace(line, "FALSE", ""));
-                    }
-                }
-            }
-        }*/
     }
 }

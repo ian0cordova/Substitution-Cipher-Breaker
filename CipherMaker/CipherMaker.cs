@@ -8,11 +8,13 @@ using System.Diagnostics;
 
 namespace Cipher.CipherMaker
 {
+    using Cipher.CipherUtility;
     /// <summary>
     /// Handles the creation and translation of substitution ciphers.
     /// </summary>
     public class CipherMaker
     {
+
         /// <summary>
         /// String which contains the alphabet.
         /// </summary>
@@ -54,35 +56,6 @@ namespace Cipher.CipherMaker
             }
             return subCipher;
         } 
-
-        /// <summary>
-        /// Checks if the dictionary has not assigned duplicate letters
-        /// </summary>
-        /// 
-        /// <param name="a_cipher"> Dictionary containing existing cipher so-far (haystack) </param>
-        /// <param name="a_value"> Value to check if exists in cipher (needle) </param>
-        /// 
-        /// <returns>
-        /// True, if it exists in dictionary, otherwise false.
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova 11:30pm, 4/21/2018
-        /// </author>
-        public static bool CipherContains(Dictionary<char, char> a_cipher, char a_value)
-        {
-            // iterate through dictionary
-            foreach (KeyValuePair<char, char> entry in a_cipher)
-            {
-                // if value already exists in dictionary, return true
-                if(entry.Value == a_value)
-                {
-                    return true;
-                }
-            }
-            // value does not exist in dictionary
-            return false;
-        }
 
         /// <summary>
         /// Converts plain text to ciphered text based on provided cipher.
@@ -135,30 +108,12 @@ namespace Cipher.CipherMaker
             string cleanString = "";
             foreach(char i in a_text)
             {
-                if (IsEnglishLetter(i) || i == ' ' || i == '\n')
+                if (CipherUtility.IsEnglishLetter(i) || i == ' ' || i == '\n')
                 {
                     cleanString += i;
                 }
             }
             return cleanString;
-        }
-
-        /// <summary>
-        /// Determines if the specified character is actually a letter
-        /// </summary>
-        /// 
-        /// <param name="a_character"> Single character to test </param>
-        /// 
-        /// <returns>
-        /// If char is an english letter return true, else false.
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 9:00pm, 4/24/2018
-        /// </author>
-        private static bool IsEnglishLetter(char a_character)
-        {
-            return ((a_character >= 'A' && a_character <= 'Z') || (a_character >= 'a' && a_character <= 'z'));
         }
     }
 }

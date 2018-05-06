@@ -28,7 +28,7 @@ namespace Cipher.CipherUtility
         public static Dictionary<string, int> GetTrainingBiGrams()
         {
             Dictionary<string, int> trainingBiGrams = new Dictionary<string, int>();
-            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetBiGrams.txt";
+            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherBreakerUWP\\Assets\\DataSetBiGrams.txt";
 
             using (FileStream fs = File.Open(path, FileMode.Open))
             using (BufferedStream bs = new BufferedStream(fs))
@@ -80,6 +80,11 @@ namespace Cipher.CipherUtility
                 {
                     nGramCount += ch;
                 }
+                // wrong format
+                else
+                {
+                    throw new Exception();
+                }
             }
             nGramCountNum = Int32.Parse(nGramCount);
 
@@ -112,7 +117,7 @@ namespace Cipher.CipherUtility
             List<string> grams = new List<string>();
             string fullText = "";
 
-            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherUtility\\DataSet.csv";
+            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\TrainingData\\DataSet.csv";
 
             using (FileStream fs = File.Open(path, FileMode.Open))
             using (BufferedStream bs = new BufferedStream(fs))
@@ -131,7 +136,7 @@ namespace Cipher.CipherUtility
             }
 
             // write dictionaries to files
-            using (StreamWriter biGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherUtility\\DataSetBigrams.txt"))
+            using (StreamWriter biGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherTrainingData\\DataSetBigrams.txt"))
             {
                 bigrams = (from entry in bigrams orderby entry.Value descending select entry)
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
@@ -140,17 +145,6 @@ namespace Cipher.CipherUtility
                     biGramFile.WriteLine("[{0} {1}]", entry.Key, entry.Value);
                 }
             }
-            /*using (StreamWriter triGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherSolver\\DataSetTrigrams.txt"))
-            {
-                trigrams = (from entry in trigrams orderby entry.Value descending select entry)
-                    .ToDictionary(pair => pair.Key, pair => pair.Value);
-
-                foreach (var entry in trigrams)
-                {
-                    triGramFile.WriteLine("[{0} {1}]", entry.Key, entry.Value);
-                }
-            }*/
-
         }
         /// <summary>
         /// Finds all of the n-grams of a letter given a specific n value
@@ -216,6 +210,7 @@ namespace Cipher.CipherUtility
                     word = "";
                 }
             }
+
             return nGramDict;
         }
 

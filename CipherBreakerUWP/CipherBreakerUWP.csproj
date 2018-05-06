@@ -113,6 +113,7 @@
     <None Include="CipherBreakerUWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\DataSetBigrams.txt" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -152,6 +153,10 @@
     <ProjectReference Include="..\CipherMaker\CipherMaker.csproj">
       <Project>{3be6b3c6-4099-42d9-8b48-83b44f7223ca}</Project>
       <Name>CipherMaker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CipherSolver\CipherSolver.csproj">
+      <Project>{6a5aaef6-7fac-4d84-b378-cf79404bb900}</Project>
+      <Name>CipherSolver</Name>
     </ProjectReference>
     <ProjectReference Include="..\CipherUtility\CipherUtility.csproj">
       <Project>{b7a51bdc-a70d-4ad4-8977-35ab5ae2fa86}</Project>
