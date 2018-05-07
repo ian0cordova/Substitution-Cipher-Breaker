@@ -6,13 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Diagnostics;
 
 namespace Cipher.CipherSolver
 {
     using Cipher.CipherUtility;
-    using System.Diagnostics;
 
+    /// <summary>
+    /// This structure is used to send multiple variables to the UWP process from
+    /// this library.
+    /// </summary>
     public struct CipherStats
     {
         public string decodedText;
@@ -54,8 +57,16 @@ namespace Cipher.CipherSolver
             while (lastScoreIncrease < STABILITY_INTERVALS)
             {
                 // breed/mutate next generation
-                population = NextGeneration(population);
-
+                // if we haven't seen a score increase, then increase the number of mutations
+                if(lastScoreIncrease > 3)
+                {
+                    population = NextGeneration(population, MUTATIONS_COUNT*3);
+                }
+                else
+                {
+                    population = NextGeneration(population, MUTATIONS_COUNT);
+                }
+                
                 // select most fit chromosomes from population
                 var topChromosomes = SelectTopChromosomes(population, cipherText, dataSetBiGrams);
                 var bestScore = topChromosomes.Item2;
@@ -107,12 +118,24 @@ namespace Cipher.CipherSolver
         }
 
         // Constant values which determine information about the genetic algorithm
+
+        // The alphabet. Nothing special here.
         private const string m_Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        // The number of chromosomes that we want to have at a given time
         private const int POPULATION_SIZE = 500;
+        
+        // The number of chromosomes that we have remaining after the scoring process
         private const int TOP_POPULATION = 75;
+
+        // Number of times to continue iteration after the best score has stopped increasing in hopes that it will increase again
         private const int STABILITY_INTERVALS = 10;
+
+        // Number of times we take genes from both parents to create a child
         private const int CROSSOVER_COUNT = 1;
-        private const int MUTATIONS_COUNT = 1;
+
+        // Number of mutations to occur on each child
+        private const int MUTATIONS_COUNT = 5;
 
         /// <summary>
         /// Generates an initial chromosome to compare against our frequency data.
@@ -321,7 +344,7 @@ namespace Cipher.CipherSolver
         /// <returns>
         /// New population that has changed by one generation
         /// </returns>
-        static List<Dictionary<char, char>> NextGeneration(List<Dictionary<char, char>> a_population)
+        static List<Dictionary<char, char>> NextGeneration(List<Dictionary<char, char>> a_population, int a_numMutations)
         {
 
             List<Dictionary<char, char>> newPopulation = new List<Dictionary<char, char>>(a_population);
@@ -344,7 +367,7 @@ namespace Cipher.CipherSolver
                 }
 
                 // randomly mutate chromosomes from child
-                for (int i = 0; i < MUTATIONS_COUNT; ++i)
+                for (int i = 0; i < a_numMutations; ++i)
                 {
                     child = Mutation(child);
                 }

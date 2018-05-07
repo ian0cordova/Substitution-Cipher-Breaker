@@ -108,7 +108,7 @@ namespace Cipher.CipherMaker
             string cleanString = "";
             foreach(char i in a_text)
             {
-                if (CipherUtility.IsEnglishLetter(i) || i == ' ' || i == '\n')
+                if (CipherUtility.IsEnglishLetter(i) || i == ' ' || i == '\n' || i == '\r')
                 {
                     cleanString += i;
                 }

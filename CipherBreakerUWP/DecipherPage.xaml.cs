@@ -100,11 +100,17 @@ namespace CipherBreakerUWP
                 tbCipherFile.Text = "Error with selected file!";
             }
         }
+
         /// <summary>
-        /// 
+        /// Handles the user loading cipher text from a file
         /// </summary>
+        /// 
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        /// 
+        /// <author>
+        /// Ian Cordova - 4/5/2018
+        /// </author>
         private async void BtnGetTrainingData_Click(object sender, RoutedEventArgs e)
         {
             try

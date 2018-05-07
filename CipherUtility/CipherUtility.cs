@@ -4,13 +4,13 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace Cipher.CipherUtility
 {
     /// <summary>
-    /// This class provides some random functionality needed by the UWP application such as file access.
+    /// This class provides some random functionality needed by
+    /// multiple different libraries to prevent the rewriting of code.
     /// </summary>
     public class CipherUtility
     {
@@ -92,60 +92,6 @@ namespace Cipher.CipherUtility
             return nGramData;
         }
 
-        /// <summary>
-        /// This is a method that is only called when creating our reference/training set of data.
-        /// ie it should be only called once, and not during normal project run time. This method
-        /// should probably be a separate entity in the form of a separate program or a script, but 
-        /// since it uses the same functionality that the main project does I am including it here 
-        /// to see everything that was done to achieve the finished result
-        /// </summary>
-        /// 
-        /// <returns>
-        /// void - but reads/writes to files
-        /// </returns>
-        /// 
-        /// <author>
-        /// Ian Cordova - 6:00pm 4/25/2018
-        /// </author>
-        private static void GetnGramsFromDataSet()
-        {
-            // dictionaries to store all n-grams and their number of occurances [n-gram, count]
-            Dictionary<string, int> bigrams = new Dictionary<string, int>();
-            Dictionary<string, int> trigrams = new Dictionary<string, int>();
-
-            // temporary storage for grams after they are found
-            List<string> grams = new List<string>();
-            string fullText = "";
-
-            string path = "C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\TrainingData\\DataSet.csv";
-
-            using (FileStream fs = File.Open(path, FileMode.Open))
-            using (BufferedStream bs = new BufferedStream(fs))
-            using (StreamReader sr = new StreamReader(bs))
-            {
-                string line;
-
-                while ((line = sr.ReadLine()) != null)
-                {
-                    line = line.ToUpper();
-                    fullText += line; // this is so ineffective and slow, but im lazy and only have to run this once
-                }
-
-                bigrams = FindnGrams(2, fullText);
-                //trigrams = FindnGrams(3, fullText);
-            }
-
-            // write dictionaries to files
-            using (StreamWriter biGramFile = new StreamWriter("C:\\Users\\icordova\\Source\\Repos\\CipherBreaker\\CipherTrainingData\\DataSetBigrams.txt"))
-            {
-                bigrams = (from entry in bigrams orderby entry.Value descending select entry)
-                    .ToDictionary(pair => pair.Key, pair => pair.Value);
-                foreach (var entry in bigrams)
-                {
-                    biGramFile.WriteLine("[{0} {1}]", entry.Key, entry.Value);
-                }
-            }
-        }
         /// <summary>
         /// Finds all of the n-grams of a letter given a specific n value
         /// </summary>
