@@ -178,7 +178,9 @@ namespace CipherBreakerUWP
         private async void btnSaveCipherText_Click(object sender, RoutedEventArgs e)
         {
             string cipherText;
+            string cipherKey = KeyToString();
             rebCipherText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out cipherText);
+            string cipherCombo = cipherKey + cipherText;
 
             var savePicker = new Windows.Storage.Pickers.FileSavePicker();
             savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
@@ -194,14 +196,34 @@ namespace CipherBreakerUWP
                 // we finish making changes and call CompleteUpdatesAsync.
                 CachedFileManager.DeferUpdates(file);
                 // write to file
-                await FileIO.WriteTextAsync(file, cipherText);
+                await FileIO.WriteTextAsync(file, cipherCombo);
                 // Let Windows know that we're finished changing the file so
                 // the other app can update the remote version of the file.
                 // Completing updates may require Windows to ask for user input.
                 Windows.Storage.Provider.FileUpdateStatus status =  await CachedFileManager.CompleteUpdatesAsync(file);
 
             }
+        }
 
+        /// <summary>
+        /// Converts the cipher key into a string format to save to the file.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// string containing the data from m_currentCipher
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 7:00pm 5/6/2018
+        /// </author>
+        private string KeyToString()
+        {
+            string cipherKey = "";
+            foreach(var entry in m_currentCipher)
+            {
+                cipherKey += entry.Key + ":" + entry.Value + "\r\n";
+            }
+            return cipherKey;
         }
     }
 }

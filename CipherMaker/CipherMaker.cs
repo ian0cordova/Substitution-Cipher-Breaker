@@ -43,16 +43,16 @@ namespace Cipher.CipherMaker
         {
             Dictionary<char, char> subCipher = new Dictionary<char, char>();
             Random rand = new Random();
-            string alphabet = m_Alphabet;
+            List<char> alphabet = new List<char>(m_Alphabet);
             int randLetter;
 
             // iterate through alphabet
             for(int i = 0; i < 26; ++i)
             {
                 // generate a random letter and check if it has already been used.
-                randLetter = rand.Next(0, alphabet.Length);
-                subCipher.Add(alphabet[i], alphabet[randLetter]);
-                Debug.WriteLine(subCipher[alphabet[i]]);
+                randLetter = rand.Next(0, alphabet.Count - 1);
+                subCipher.Add(m_Alphabet[i], alphabet[randLetter]);
+                alphabet.RemoveAt(randLetter);
             }
             return subCipher;
         } 

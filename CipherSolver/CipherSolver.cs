@@ -13,6 +13,12 @@ namespace Cipher.CipherSolver
     using Cipher.CipherUtility;
     using System.Diagnostics;
 
+    public struct CipherStats
+    {
+        public string decodedText;
+        public int accuracy;
+    }
+
     /// <summary>
     /// Handles the deciphering of encoded text
     /// </summary>
@@ -23,40 +29,13 @@ namespace Cipher.CipherSolver
         /// </summary>
         /// <param name="a_cipherText"></param>
         /// <returns></returns>
-        public static string Decrypt(Dictionary<string, int> a_trainingData, string a_cipherText = "")
+        public static CipherStats Decrypt(Dictionary<string, int> a_trainingData, string a_cipherText = "", Dictionary<char, char> a_cipherKey = null)
         {
-            if (a_cipherText == "") return "";
+
+            CipherStats stats = new CipherStats();
+            if (a_cipherText == "") return stats;
             string cipherText = a_cipherText; 
-            // File.ReadAllText("C:\\Users\\icordova\\Documents\\cipherText.txt");
-            /* Dictionary<char, char> solution = new Dictionary<char, char>()
-            {
-                {'A', 'Y' },
-                {'B', 'S' },
-                {'C', 'E' },
-                {'D', 'H' },
-                {'E', 'C' },
-                {'F', 'A' },
-                {'G', 'I' },
-                {'H', 'N' },
-                {'I', 'T' },
-                {'J', 'P' },
-                {'K', 'L' },
-                {'L', 'V' },
-                {'M', 'Z' },
-                {'N', 'M' },
-                {'O', 'W' },
-                {'P', 'D' },
-                {'Q', 'O' },
-                {'R', 'R' },
-                {'S', 'G' },
-                {'T', 'F' },
-                {'U', 'U' },
-                {'V', 'Q' },
-                {'W', 'K' },
-                {'X', 'B' },
-                {'Y', 'J' },
-                {'Z', 'X' }
-            };*/
+
             // possibly read training data set into memory here or as a private member
             Dictionary<string, int> dataSetBiGrams = new Dictionary<string, int> (a_trainingData);
 
@@ -80,7 +59,7 @@ namespace Cipher.CipherSolver
                 // select most fit chromosomes from population
                 var topChromosomes = SelectTopChromosomes(population, cipherText, dataSetBiGrams);
                 var bestScore = topChromosomes.Item2;
-                Console.WriteLine(bestScore);
+                Debug.WriteLine(bestScore);
                 population = topChromosomes.Item1;
 
                 // if the score improved use new score.
@@ -97,26 +76,34 @@ namespace Cipher.CipherSolver
             }
 
             // print results
-            Console.WriteLine("Best solution found after {0} iterations", iterations);
-            Console.WriteLine(DecodeText(cipherText, population[0]));
+            Debug.WriteLine("Best solution found after {0} iterations", iterations);
+            Debug.WriteLine(DecodeText(cipherText, population[0]));
             foreach (var entry in population[0])
             {
-                Console.WriteLine(entry.Key + " : " + entry.Value);
+                Debug.WriteLine(entry.Key + " : " + entry.Value);
             }
 
-            double accuracy = 0;
-            /*foreach (var entry in solution)
+            // if a cipherkey was passed to us, lets check our result against the known solution
+            double acc = 0;
+            if (a_cipherKey != null)
             {
-                if (population[0].ContainsKey(entry.Key) && population[0][entry.Key] == entry.Value)
-                {
-                    accuracy++;
-                }
-            }*/
-            Console.WriteLine("Letters correct: " + accuracy);
 
-            string decodedText = DecodeText(cipherText, population[0]);
-            Debug.WriteLine(decodedText);
-            return decodedText;
+                foreach (var entry in a_cipherKey)
+                {
+                    if (population[0].ContainsKey(entry.Key) && population[0][entry.Key] == entry.Value)
+                    {
+                        acc++;
+                    }
+                }
+                Debug.WriteLine("Letters correct: " + acc);
+                Debug.WriteLine(((acc / 26) * 100) + "%");
+                stats.accuracy = (int)((acc / 26) * 100);
+            }
+
+
+            stats.decodedText = DecodeText(cipherText, population[0]);
+
+            return stats;
         }
 
         // Constant values which determine information about the genetic algorithm
@@ -155,7 +142,7 @@ namespace Cipher.CipherSolver
             // fill in chromosome with most likely possibilites
             foreach (var letter in topCipherTextChars)
             {
-                randLetter = rand.Next(0, topChars.Count() - 1);
+                randLetter = rand.Next(0, topChars.Count - 1);
                 initialChromosome.Add(letter, topChars[randLetter]);
                 alphabet.Remove(topChars[randLetter]);
                 topChars.RemoveAt(randLetter);
@@ -213,9 +200,9 @@ namespace Cipher.CipherSolver
             {
                 // save up to 10 of the top letters to use
                 if (commonChars.Count >= 10) break;
-
                 // making assumption we are using bigrams
                 commonChars.Add(entry.Key[0]);
+                if (commonChars.Count >= 10) break;
                 commonChars.Add(entry.Key[1]);
             }
 
@@ -469,7 +456,7 @@ namespace Cipher.CipherSolver
             // decode text using cipher
             foreach (char i in a_encodedText)
             {
-                if(i == ' ' || i == '\n' || i == '\t')
+                if(i == ' ' || i == '\n' || i == '\t' || i == '\r')
                 {
                     decodedText += i;
                     continue;

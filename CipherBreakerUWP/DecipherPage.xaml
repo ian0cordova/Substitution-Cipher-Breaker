@@ -80,5 +80,11 @@
             HorizontalAlignment="Left" 
             Margin="623,245,0,0"  
             VerticalAlignment="Top"/>
+        <TextBlock 
+            x:Name="tbStats"
+            Text=""
+            HorizontalAlignment="Left" 
+            Margin="296,736,0,0"  
+            VerticalAlignment="Top" Height="22"/>
     </Grid>
 </Page>

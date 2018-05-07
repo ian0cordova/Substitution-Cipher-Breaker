@@ -25,9 +25,11 @@ namespace CipherBreakerUWP
             this.InitializeComponent();
             rebCipherOutput.IsReadOnly = true;
             m_trainingData = new Dictionary<string, int>();
+            m_cipherKey = new Dictionary<char, char>();
         }
 
         private Dictionary<string, int> m_trainingData;
+        private static Dictionary<char, char> m_cipherKey;
 
         /// <summary>
         /// Provides functionality to back button.
@@ -66,11 +68,13 @@ namespace CipherBreakerUWP
                 return;
             }
 
-            string decodedText = CipherSolver.Decrypt(m_trainingData, cipherText);
-            Debug.WriteLine(decodedText);
+            CipherStats stats = CipherSolver.Decrypt(m_trainingData, cipherText, m_cipherKey);
+            Debug.WriteLine(stats.decodedText);
             rebCipherOutput.IsReadOnly = false;
-            rebCipherOutput.Document.SetText(Windows.UI.Text.TextSetOptions.None, decodedText);
+            rebCipherOutput.Document.SetText(Windows.UI.Text.TextSetOptions.None, stats.decodedText);
             rebCipherOutput.IsReadOnly = true;
+
+            tbStats.Text = (stats.accuracy) + "% accuracy";
         }
 
         /// <summary>
@@ -215,6 +219,54 @@ namespace CipherBreakerUWP
             else
             {
                 cipherText = "";
+            }
+            
+            // if file contents contains a cipherkey
+            if(cipherText[1] == ':')
+            {
+                return GetCipherKeyFromFile(cipherText);
+            }
+            else
+            {
+                return cipherText;
+            }
+            
+        }
+
+        /// <summary>
+        /// Reads the cipher key from the file and stores it to member variable
+        /// </summary>
+        /// 
+        /// <param name="a_fileContents"> contents from cipher file </param>
+        /// 
+        /// <returns>
+        /// string containing the parsed cipher text from the file
+        /// </returns>
+        /// 
+        /// <author>
+        /// Ian Cordova - 7:50pm, 4/6/2018
+        /// </author>
+        private static string GetCipherKeyFromFile(string a_fileContents)
+        {
+            string cipherText = "";
+            using (StringReader sr = new StringReader(a_fileContents))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    // file contains a cipherkey
+                    if (line[1] == ':')
+                    {
+                        // format is A:Z - so we know that spot 0 and 2 will be the desired characters
+                        m_cipherKey.Add(line[0], line[2]);
+                    }
+                    // line consists of cipher text
+                    else
+                    {
+                        cipherText += line;
+                    }
+                }
             }
             return cipherText;
         }
