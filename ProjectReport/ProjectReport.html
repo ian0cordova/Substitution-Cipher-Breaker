@@ -2,6 +2,7 @@
 <html>
   <head>
     <style type="text/css">
+      html { font-size: 12pt}
       .indented {padding-left: 50pt; padding-right: 50pt;}
     </style>
   </head>
@@ -80,28 +81,68 @@
         <p>
           For this User's Manual, I will give a broad explanation of each feature and how to properly use the aforementioned feature. As features are added, this section will updated accordingly.
         </p>
-        <img src="images/createACipher.png" width="50%">
+        <img src="images/createACipher.png" width="75%">
         <p>
           <b>1. Generate a single-letter substitution cipher key:</b>
           When the application loads there are two buttons. Click on the button that reads "Create a Cipher."
           <p class="indented"> <img src="images/createCipherPage.png" width="75%"></p>
-          <p class="indented"><b>A. Generate button:</b> Click here to generate a newly randomized cipher key. Feel free to keep clicking til you get one you like! </p>
-          <p class="indented"><b>B. Manually enter plain text to be ciphered:</b> If you would like to manually type or copy-paste text in to this field, be my guest. Note: Punctuation and capitalization are ignored during enryption. </p>
-          <p class="indented"><b>C. Translate text using the generated cipher key:</b> Click this button to see the text entered above be encryted into cipher text using the cipher key that you generated. If you did not generate a cipher key prior to clicking this button you will receive an error message that tells you to generate a key first.</p>
+          <p class="indented"><b>A. Manually enter plain text to be ciphered:</b> If you would like to manually type or copy-paste text in to this field, be my guest. Note: Punctuation and capitalization are ignored during enryption. </p>
+          <p class="indented"><b>B. Translation appears here:</b> The result of your encrypted text appears in this text box.</p>
+          <p class="indented"><b>C. Generate button:</b> Click here to generate a newly randomized cipher key. Feel free to keep clicking til you get one you like! </p>
           <p class="indented"><b>D. Load plain text from a file:</b> If you would like to enter alot of text into the field by loading the text from a saved file you can click this button in order to choose your saved file. Note that .txt files must be coded to utf-8 and not ANSI. If you attempt to load an ANSI saved file you will receive an error message in the text box (Which you can encrypt if you would like! Fun right?)</p>
-          <p class="indented"><b>E. Translation appears here:</b> The result of your encrypted text appears in this text box.</p>
-          <p class="indented"><b>F. Save the encrypted text to a file: </b> Once you have successfully encrypted your plain text you can now save it to a file to reference later or to save to send your manifesto to the police or something. </p>
-          <p class="indented"><b>G. Type your own file name: </b> Enter the file name that you would like to save your cipher text as.
+          <p class="indented"><b>E. Save the encrypted text to a file: </b> Once you have successfully encrypted your plain text you can now save it to a file to reference later or to save to send your manifesto to the police or something. </p>
+          <p class="indented"><b>F. Translate text using the generated cipher key:</b> Click this button to see the text entered above be encryted into cipher text using the cipher key that you generated. If you did not generate a cipher key prior to clicking this button you will receive an error message that tells you to generate a key first.</p>
+          <p>Step-by-Step: To translate plain text to cipher text follow these steps.</p>
+          <ul>
+            <li>
+              Enter plain, English text into field A by either typing it manually, or by choosing a file by pressing button D (Load Plain Text). Note that the more plain text you have, the higher accuracy the results will be.
+            </li>
+            <li>
+              Generate a random cipher key by pressing button C (Generate).
+            </li>
+            <li>
+              Press button F (Translate) to translate your entered plain text with the generated cipher key. Your encoded text will be displayed in field B. 
+            </li>
+            <li>
+              Save the cipher text to a file. You will be prompted to choose the name and location of the file. The saved file will contain the cipher key at the top as well as the encoded message below.
+            </li>
+          </ul>
        </p>
        <p>
         <b>2. Decipher existing encrypted text:</b>
         When the application loads there are two buttons. Click on the button that reads "Decipher Text."
-          <p class="indented"> Next image will go here.</p>
-          <p class="indented"><b>This page has not been designed yet.</b> </p>
+          <p class="indented"> <img src="images/DecipherPage.png" width="75%"></p>
+          <p class="indented"><b>A. Cipher text input field</b> Manually enter or copy-paste cipher text here to be decrypted</p>
+          <p class="indented"><b>B. Results text output field</b> The result of the algorithm processing your cipher text will be output here. </p>
+          <p class="indented"><b>C. Decipher button</b> Press this button when you are ready to run the algorithm. Note that the time for it to run may take about a minute depending on the size of the text that has been entered into the input field.</p>
+          <p class="indented"><b>D. Load Text</b> select a file containing the cipher text. If you generated the file using this application, then it will also measure the accuracy of the solution against the cipher key stored in the file.</p>
+          <p class="indented"><b>E. Load Training Set</b> Do to odd UWP file access permissions, the user must load their own training data. I have provided one in the contents of the project, however should the user provide their own, then they must follow the same format as the existing one.</p>
+          <p>
+            Step-By-Step: To run the decryption algorithm follow these steps.
+          </p>
+          <ul>
+            <li>Enter cipher text by either typing it, copy-pasting it into the text field or selecting it from a file.</li>
+            <li>
+              Load the training set. The file name that comes with the program is DataSetBiGrams.Txt so select that file.
+            </li>
+            <li>
+              Click Decipher and wait patiently for your results. Results may vary.
+            </li>
+          </ul>
        </p>
       <h2>Design Document</h2>
         <h4>Project Design Overview</h4>
         <p> The entirety of the solution has been broken up into 5 main parts. Each file contains one class, so I will explain the primary functionality of each file and each project that is a part of the entire solution.</p>
+        <p class=><b>Terminology</b></p>
+        <p>
+           Before I start I want to add a sort-of glossary that explains the less-known terms that I will be using. Figuring this out during my research in the topic made understanding the explanations a lot more challenging.
+           <ul class="indented">
+             <li><b>Cipher Key: </b> In this case, a mapping of the alphabet where each letter is mapped to another random, unique character.</li>
+             <li><b>Chromosome: </b> a potential solution to our problem. In this case it is a cipher key that can decode the encrypted text.</li>
+             <li><b>Population: </b> a bunch of chromosomes. At the beginning of the program and at the start of each generation we will repopulate with new/fresh chromosomes.</li>
+             <li><b>N-Gram: </b> An n number of sequential letter combinations in a given word. Example: TEST has the bi-grams TE, ES, and ST and the tri-grams TES, and EST.</li>
+           </ul>
+        </p>
         <p><b>CipherBreakerUWP</b></p>        
         <p>
             This is the main entry point to the application. Every other part of the entire solution is referenced from here in order to solve a problem and display it on the screen.
@@ -109,32 +150,220 @@
         <p class="indented">
             <i>MainPage.xaml / MainPage.xaml.cs</i> : this is the homepage for the application. From here we can access the other pages and that's it.
         </p>
+        <p class="indented">
+            NavigateToCipherPage_Click - On click event that allows the user to navigate to the Cipher page.
+          </p>
+          <p class="indented">
+            NavigateToDecipherPage_Click - On click event that allows the user to navigate to the Decipher page.
+          </p>
         <img class="indented" src="images/projectOverview.png">
         <p class="indented">
             <i>CipherPage.xaml / CipherPage.xaml.cs</i> : this is the page where the creation of a cipher happens. This page contains a number of RichEditBoxes, Buttons, and TextBlocks. Each of the components is hooked up to specific functionality in the .cs page which allows us to call the CipherMaker library.
         </p>
-        <img class="indented" src="images/cipherPageOverview.png" width="50%">
+        <p class="indented">
+          CipherPage - initializes m_currentCipher to an empty dictionary, and sets CipherText field to Read-Only
+        </p>
+        <p class="indented">
+          Back_Click - navigates user back to Main Page
+        </p>
+        <p class="indented">
+          CreateCipherBtn_Click - calls CipherMaker method CreateSubCipher to create a new cipher key and displays it in a textblock.
+        </p>
+        <p class="indented">
+          btnTranslate_Click - Verifies that a cipher ket has been generated then reads text from textbox. Passes text to CipherMaker.EncodeText which encodes the entered text. Then prints the result to the screen.
+        </p>
+        <p class="indented">
+          btnLoadText_Click - allows the user to specify a file to be translated into cipher text.
+        </p>
+        <p class="indented">
+          SelectPlainTextFileAsync - gets called by btnLoadText, handles the FilePicker and verification of plain text file to be translated.
+        </p>
+        <p class="indented">
+          btnSaveCipherText_Click - saves the cipher text and cipher key to a file using the FileSavePicker mechanism
+        </p>
+        <p class="indented">
+          KeyToString - converts the generated cipher key into string format to be saved in the file.
+        </p>
+        <img class="indented" src="images/cipherPageOverview.png">
         <p class="indented">
           <i>DecipherPage.xaml / DecipherPage.xaml.cs</i> : this page is where the user can load or enter cipher text and call the genetic algorithm (called from CipherSolver library) in order to decipher the text with as much accuracy as possible.
         </p>
-        <p class="indented">image goes here.</p>
+        <p class="indented">
+          DecipherPage - sets RichEditBox to Read-Only, initializes m_trainingData and m_cipherKey
+        </p>
+        <p class="indented">
+          Back_Click - navigates user back to Main Page.
+        </p>
+        <p class="indented">
+          BtnDecipherText_Click - reads in cipher text and calls CipherSolver.Decrypt to do the heavy lifting. If the method returns us an accuracy, we print it to the screen as well as the solution.
+        </p>
+        <p class="indented">
+          BtnGetCipherText_Click - allows user to load cipher text from a file
+        </p>
+        <p class="indented">
+          BtnGetTrainingData_Click - allows user to specify desired training data
+        </p>
+        <p class="indented">
+          SelectTrainingDataAsync - handles FilePicker usage and allows user to select file from which they want their training data and then parses the data and stores it in a Dictionary
+        </p>
+        <p class="indented">
+          SelectCipherTextFileAsync - handles FilePicker usage and allows user to select a file from which contains the cipher text and possibly a cipher key
+        </p>
+        <p class="indented">
+          GetCipherKeyFromFile - parses the cipher key from the selected file if it contains one in the format set by the CipherPage saver
+        </p>
+        <img class="indented" src="images/decipherPageOverview.png">
 
         <p><b>CipherMaker</b></p>
         <p>
           This class handles the creation of cipher keys and the translation of plain text to cipher text.
         </p>
         <p>
-          Notable data structures: Dictionary&#60;char, char&#62; - this data structure is used throughout the entirety of the project as a cipher key. It is a mapping of the alphabet A-Z to random unique characters A-Z. Somtimes a letter will map to itself, but most likely it will map to a completely random letter.
+          Notable data structures: 
+        </p>
+        <p>
+          Dictionary&#60;char, char&#62; - this data structure is used throughout the entirety of the project as a cipher key. It is a mapping of the alphabet A-Z to random unique characters A-Z. Somtimes a letter will map to itself, but most likely it will map to a completely random letter.
+        </p>
+        <p>Methods: </p>
+        <p>
+          CreateSubCipher - handles the creation of the cipher key. Create list of all characters in the alphabet and randomly assign them to characters A-Z while crossing each one off as they are assigned.
+        </p>
+        <p>
+          EncodeText - converts plain text into cipher text by using a specified cipher key.
+        </p>
+        <p>
+          CleanString - ensures that the plain text passed to us contains only letters and spaces. We will not be decoding any other ASCI values.
         </p>
         <img src="images/cipherMakerOverview.png">
-
+        <p><b>CipherTrainingData</b></p>
+        <p>
+          This class acts as a separate entity from the rest of the project. Its purpose is to read in large amounts of text data and parse it into bi-grams. It is dynamic enough that you can specify a file and it will read through it and update the data txt files that already exist and increment the count of existing bi-grams and add them if they do not exist.
+        </p>
+        <p>
+          This class only has two methods. One initializes the file with data from a file and the other reads in our existing parsed dataset, adds data to it, and then saves back into the file.
+        </p>
+        <p>
+          The datasets that I found free online were the script to the series <i>The Office</i>, the script to <i>Seinfeld</i>, and the entirety of the book <i>A Tale of Two Cities</i>. I initially just started out with <i>The Office</i>, but when I realized that the accuracy of my algorithm was low I considered that I might be lacking sufficient training data. I then added <i>Seinfeld</i> to the training data and also found an algorithm that only used <i>A Tale of Two Cities</i> with great results, so I decided to add that as well.
+        </p>
+        <p>
+          Increasing the amount of data in my training data sets did not increase the accuracy by a significant amount, therefore I was able to rule that out as being a major problem in my algorithm. Especially since another person's research yielded accurate results using only one of my three data sets.
+        </p>
+        <img src="images/cipherTrainingDataOverview.png" class="indented">
         <p><b>CipherSolver</b></p>
         <p> 
-          This class has one function and that is to read cipher text and do its best to return plain text by using a genetic algorithm. Here I will explain the algorithm and the design for this feature.
-
+          This class has one function and that is to read cipher text and iterate towards a potential solution. Here I will explain the algorithm and the design for this feature.
+        </p> 
+        <p class="indented">
+          <b>Notable Data Structures</b>
         </p>
-        <p><b>CipherTrainingData</b></p>
+        <p class="indented">
+            List&#60;Dictionary&#60;string, int&#62;&#62; - this is used for our population. Each dictionary is a chromosome and the population is the list of chromosomes. 
+        </p>
+        <p class="indented">
+          Dictionary&#60;string, int&#62; - This dictionary is used for storing n-grams and their frequencies. It is used when reading the data from out data set as well as after we parse the bi-grams out of the decoded text to score them.
+        </p>
+        <p class="indented">
+          struct CipherStats - structure used for sending multiple variables back to the UWP application after being called. We send the decoded text as well as the percentage of accuracy that our algorithm achieved. 
+        </p>
+        <p class="indented">
+          HashSet&#60;chart&#62; - used for taking the top characters of each dataset to initialize chromosomes for our beginning population. I can simply keep adding characters to the HashSet and stop once it has hit 10 since it will ignore duplicate values.
+        </p>
+        <p class="indented"><b>Initial Population Creation</b></p>
+        <p class="indented"> 
+          After obtaining sufficient training data, the first step in this process is creating an initial population. Some algorithms that I found online used completely random initializations and some used a very calculated determination using frequencies of different n-grams.
+        </p>
+        <p class="indented">
+          I initially used a complete randomization of my chromosomes to add to the population. The idea being that any completely wrong solutions would quickly be removed from the population after the first scoring. What I later moved to after seeing low accuracy scores is slightly more sophisticated.
+        </p>
+        <p class="indented">
+          The method that I created, which I believe to be a reasonable medium and is in the final version of the project,takes the first 10 unique characters from the top bi-grams from the cipher text and randomly assigns them to the top first 10 unique characters from the top bi-grams from our training data. When done by hand, the top 10 characters from both had about 8 out of 10 in common with one another. Creating the chromosomes with those top 10 matching up creates a good chance that at least some of the chromosomes will have a few correct assignments right away. The remaining 16 characters are randomly assigned to one another. 
+        </p>
+        <p class="indented">
+          According to the research done by Jason Brownbridge from the University of Cape Town, a population size of 500 was enough to converge to a solution. In addition, I also saw more accurate results while using the same population, although the using a larger population such as this really slows down the speed of the program.
+        </p>
+        <p class="indented"><b>Scoring/Selection</b></p>
+        <p class="indented">
+          At this point we have now begun the genetic algorithm and we need to select the top individual chromosomes that will continue to the next generation. From what I found, the scoring algorithms used are somewhat similar across the board, so I don't believe improve the accuracy of the algorithm by a significant amount by altering this part.
+        </p>
+        <p class="indented">
+          At the end of each generation we choose the most "fit" individuals to continue to the next iteration. We do this by finding the number of occurances of bi-grams in the cipher text after decoding it with each chromosome. If a bi-gram from the decoded cipher text exists in the training data we multiply both frequences together to create a score. A more common bi-gram will yield a higher score and is more likely to be the correct option. Once we have scored each chromosome we remove the bottom 85% of chromosomes and use the remaining 15% to repopulate in place of those that we removed. 
+        </p>
+        <p class="indented"><b>Repopulation/Crossover</b></p>
+        <p class="indented">
+          During repopulation we use a strategy called crossover to take parts of our most fit chromosomes and create new chromosomes base off of them. 
+        </p>
+        <p class="indented">
+          The idea of crossover in our application involves taking two parents and passing some of their chracter mappings down in order to produce a child. The implementation of crossover that I used is fairly simple. I take two random key-value pairs from ParentX and add them to the child. I then fill the rest of the child's data in with the remaining keys from ParentY. 
+        </p>
+        <p class="indented">
+          Unfortunately this is likely to cause a problem where two keys may have the same value. I personally solved this problem by using mutation in the next step. Some other algorithms carefully chose the two parents with the criteria that this type of occurance would not happen.
+        </p>
+        <p class="indented"><b>Mutation</b></p>
+        <p class="indented">
+          Mutation is a tool to change new chromosomes in a random way. If the top population is far from the correct solution, then mutation gets us towards the correct solution. It is not a complete rewrite of a chromosome but it is a change or two that might yield higher scoring results.
+        </p>
+        <p class="indented">
+          As explained before, during crossover we run into an issue in which multiple keys point to the same character. If that is allowed to stay in a chromosome, then we have no chance at reaching a final solution. To correct that, I chose to mutate any duplicate values by randomly replacing them with any characters that are unrepresented in the values of the chromosome. This accomplishes both the task of incorporating an element of randomness to the population, and also removes any duplicate values.
+        </p>
+        <p class="indented">
+          If a chromosome does not have any duplicate values, then the algorithm chooses two random letter mappings and swaps their values in order to mix things up. Increasing the number of mutations from 1 per chromosome to 3 per chromosome also made a noticeable difference in the accuracy. 
+        </p>
+        <p class="indented">
+          By this stage, the new child has received parts of the chromosome of two parents and has also been mutated. We now add them to the population to once again be scored and compared among the most fit individuals. Should a mutation be beneficial to the chromosome we will see its score increase and remain in the population through the next iteration.
+        </p>
+        <img src="images/cipherSolverOverview.png" class="indented">
+        <p class="indented"><b>Results</b></p>
+        <p class="indented">
+          As we iterate towards a solution the scores of the chromosomes will gradually increase as we introduce more fit individuals to the population. We record the highest score and when the highest score stops increasing we count how many iterations that the score does not increase. In this algorithm, if the score does not increase for 10 generations, then we take the most fit individual of the population and claim that as our best solution.
+        </p>
+        <p>Below are two of my more accurate results. </p>
+        <img src="images/results.png">
+        </br>
+        <img src="images/results2.png">
+        </br>
+        <p>Comparison of original text to decoded text from result with 61% accuracy</p>
+        <img src="images/comparison.png" width="90%">
+        </br>
 
+        <p><b>CipherUtility</b></p>
+        <p>
+          The primary purpose of this class is to support the other libraries by removing functions that are needed across multiple libraries. This way, no code is written twice and can simply be called from this helper class. Since there is no broad overview of the functionality of this class, I will give a break down of each method.
+        </p>
+        <p class="indent">
+          GetTrainingBiGrams() - This method loads all of the bi-grams from our dataset and stores them into a dictionary for future use.
+        </p>
+        <p class="indent">
+          ParseDataSetLine() - This method is used for parsing the text loaded from the training bi-grams txt file.
+        </p>
+        <p class="indent">
+          FindnGrams() - This method accepts a string of text and parses it into all of the possible n-grams and counts the occurances of each one. You can specify n and have it return either bi-grams/tri-grams/etc. Returns a dictionary of n-grams and their respective frequencies.
+        </p>
+        <p class="indent">
+          IsEnglishLetter() - determining if a character is a letter a-z or A-Z is important when reading unkown txt files to ensure that the data we are reading in is valid for us to use. Also for determining when to start reading a word and when to stop.
+        </p>
+        <p><b>Challenges</b></p>
+        <p>
+          I faced a number of challenges while working on this project. Most of the larger changes that I made due to challenges are listed at the beginning, however here is a compilation of some of the smaller design decisions that I made along the way.      
+        </p>
+        <ul>
+          <li>
+            UWP File Access - UWP is very limited in what files it can/can not access. It is not simple in that I can just enter in a path and have it open a file. The file must be pre-approved from a list of libraries (ie Music, Pictures, Contacts, etc), or must be manually selected by the user. However, once selected by the user,it can be opened again later for future use. This resulted in using the FilePicker feature for just about all of my file access. For the most part this was fine, however the user must select which training data to use for the genetic algorithm, when this was supposed to be an aspect that is pre-determined and stored along with the program. 
+          </li>
+          <li>
+            <p>
+              Accuracy of Genetic Algorithm - This part has proven the most challenging part of the project. And expectedly so. Despite following the steps of multiple algorithms of my sources, I can not quite seem to get my algorithm to converge to an accurate solution. I did manage to improve my accuracy on my own by improving upon some of the steps that I found. 
+            </p>
+            <p>
+              For example, one algorithm that was able to converge to a solution with 98% accuracy used a completely random initial chromosome populaton. While I was not able to achieve 98% accuracy, I was able to improve upon my ~20% accuracy to a consistent 30+% accuracy. 
+            </p>
+            <p>
+              In addition, when using the crossover/mutation method from another algorithm I ran into the problem where chromosomes would have duplicate values which makes for an even less accurate result. I was able to solve this by using a similar crossover method, but by also mutating any duplicate values to ensure that they are unique. This allowed my accuracy to occasionally reach the 40+% zone. Also, playing with the number of mutations based on the number of iterations since the last score increase helped. With this method, I was able to break both 50% and 60% accuracy ratings.
+            </p>
+            <p>
+              I believe that with more fine tuning I would be able to fill in any holes with my algorithm to converge to a solution. I have some more ideas to fine tune that I plan on outlining in my Conclusion/Moving Forward section.
+            </p>
+          </li>
+        </ul>
       <h2>Summary and Conclusion</h2>
       <h2>Bibliography</h2>
   </body>
