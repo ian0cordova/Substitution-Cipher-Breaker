@@ -8,11 +8,27 @@
   </head>
   <body>
     <h1>Single-Letter Substitution Cipher Breaker</h1>
+    <p><b>By Ian Cordova</b></p>
+    <p>Find the code repository at https://github.com/ian0cordova/Substitution-Cipher-Breaker</p>
       <!-- Introduction to the Project including changes to initial plan and reasoning -->
       <h2>Introduction to Project</h2>
         <p>
           I chose this topic for my Senior Project a number of reasons. Ciphers and decryption have always fascinated me for as long as I remember. In addition, I wanted to learn something new. The technologies and algorithm chosen for this project were the perfect blend of challenge and familiarity to allow a comfortable transition to the project while improving my skills as a software designer and programmer.
         </p>
+        <p><b>A Short History of the Substitution Cipher</b></p>
+        <p>
+          First off, let us answer the question of what is a substitution cipher? A single-letter substitution cipher is a remapping of characters to other characters that can obscure the text of the original message. There are a number of ways to do this. One famous method of substitution is the Caesar Cipher. The Caesar cipher used a method which shifted the characters of the alphabet by a certain number. The recipient would easily be able to decipher the text if they knew the number, where as any person who intercepted it would see a jumble of letters.
+        </p>
+        <p>This is an example of a Caesar Cipher with a left shift of three.</p>
+        <img src="images/caesarCipher.png">
+        <p>
+          Another form of cipher creation uses a keyword. By placing the keyword at the start of the alphabet and filling in the remaining letters, anyone that knows the key word can easily decipher it.
+        </p>
+        <img src="images/keywordCipher.png">
+        <p>
+          In the example of this project, we will be creating a completely random cipher key that is the most secure since there is no mnemonic device to assist in decrypting it. Although it is the most secure, the single-letter substitution cipher has long been cracked through the method of frequency analysis. Determining the frequency of specific letters and letter combinations can be used to crack simple substitution ciphers in any language.
+        </p>
+        <p><b>The Project</b></p>
         <p>
           My plan for the project from the beginning varied from the final result. I made some changes to make the project flow better and also to steer away from some potentially unnecessary challenges. The original break down is as follows: 
           <ul>
@@ -68,7 +84,7 @@
         </ul>
       </p>
       <p>
-        While I have had the opportunity to worth with C# in the past, it was not in this capacity. My experience was with creating a web applicaton. Being able to use C# for a somewhat complex algorithm as well as UWP really cemented my knowledge and comfort in the language. UWP also uses XAML as their formatting language which was considerably simple to use and to create an aesthetic application. From my experience it was far easier than formatting a design on Android or even HTML. 
+        While I have had the opportunity to work with C# in the past, it was not in this capacity. My experience was with creating a web applicaton. Being able to use C# for a somewhat complex algorithm as well as UWP really cemented my knowledge and comfort in the language. UWP also uses XAML as their formatting language which was considerably simple to use and to create an aesthetic application. From my experience it was far easier than formatting a design on Android or even HTML. 
       </p>
       <p>
         In addition to UWP, I learned a great deal about genetic algorithms. I had barely ever dabbled in Machine Learning before, so having the opportunity to go all in and write an algorithm such as this ended up being a lot to take on. By the end of it, however, I feel confident in my knowledge enough that I could approach using a genetic algorithm for other applications as well.
@@ -329,6 +345,9 @@
         <p>
           The primary purpose of this class is to support the other libraries by removing functions that are needed across multiple libraries. This way, no code is written twice and can simply be called from this helper class. Since there is no broad overview of the functionality of this class, I will give a break down of each method.
         </p>
+        <p>
+          Creating this class actually allowed me to cut down on hundreds of lines of code since as I started the project,in some cases I just copy-pasted the functionality that I needed at that moment. Some methods were similar to others and I simply added some parameters and made them more dynamic to remove multiple other methods from different classes.
+        </p>
         <p class="indent">
           GetTrainingBiGrams() - This method loads all of the bi-grams from our dataset and stores them into a dictionary for future use.
         </p>
@@ -365,6 +384,65 @@
           </li>
         </ul>
       <h2>Summary and Conclusion</h2>
+      <p>
+          When I first started this project and did my initial research I honestly had no idea how I would be able to write this genetic algorithm. The task seemed daunting, the documentation did not make sense, and I felt intimidated. After getting my hands dirty, reading through a number of pdfs from professors and also some examples I started to make sense of the different steps required and came up with some ideas on how I can program them. The switch from C++ to C# made the coding part a lot easier as well since I found the data structures to be more intuitive to use. I now feel confident that I could explain this algorithm in a way that just about any layman could understand.
+      </p>
+      <p><b>Moving Forward</b></p>
+      <p>
+        There are a number of ways that I believe that I could improve upon the algorithm that I created and a number of features that I would like to add down the road. Although I am completed with my Senior Project, I believe that I will continue to work on this endeavor in the future when I am feeling passionate about the subject. 
+      </p>
+      <p><b>Improving Accuracy</b></p>
+      <p>
+        I believe there are still a few things that I could try in order to improve the accuracy of the algorithm enough for it to be able to consistently converge to a solution. I was able to make a decent amount of progress in the areas that I did change without to much effort and just by tweaking some parameters. For example, increasing the number of mutations in each generation improved my accuracy scores up to a certain point and then began to hurt my scores. Finding the optimal number of mutations would be a huge improvement to the project. 
+      </p>
+      <p>
+        My idea to alter the number of mutations would be to mutate each part of the population by a different amount. The first 25% of children may have no mutations and only contain crossover from the two parents. The second quarter might randomly have one to five mutations. I found that each child having five mutations improved my scores from each child only having one mutation. The third quarter could have five to ten mutations. In my testing, I noticed that as the number of score increases slowed down, throwing some curve balls into the mix increased the chance of having a chromosome with a top score. In my current implementation if there was not a score increase for three generations, then I increased the number of mutations from five to fifteen. I believe that changing this method to the aforementioned spread of mutations would improve accuracy. The final 25% of children could be Hail-Marys that have nothing to lose. Perhaps making the last group of children completely random or having fifteen or more mutations could introduce some chromosomes that would not have otherwise been generated. The spread could then be a factor of accuracy as well. Perhaps a 25/25/25/25 split among children would be less accurate than a 10/40/40/10 split. 
+      </p>
+      <p>
+        Another aspect which I did not alter much was the crossover function. I found a simple method to create a child from two parents and stuck with it. Perhaps a child that contains 50% of the mappings of each parent could yield stronger results so long as the discrepencies with duplicates could be easily managed. Another change would be to allow the child to crossover with itself once or twice after its initial creation. The child would at first be a mix of ParentX and ParentY, but we could then make the child be a mix of ParentX and itself.
+      </p>
+      <p>
+        When I continue working on this project, I would like to test out these ideas among others in order to create an accurate as possible algorithm.
+      </p>
+      <p><b>Improving Runtime</b></p>
+      <p>
+        One poor side effect of using the genetic algorithm is the poor runtime. With a sufficiently sized population, each iteration can take a long time to process. However a larger population yields more accurate results. However I do believe that the algorithm can be improved in a number of ways that can speed it up.
+      </p>
+      <p>
+        One part that I believe takes up a lot of time is the fact that every time we score each chromosome, we must decode the cipher text with each chromosome in the population. The time it takes is equal to (length of cipher text) * (number of chromosomes in population) * (look up of a value in a chromosome). If instead of a Dictionary we had a convenient data structure that was able to use either the key or the value as the key then we could cut down our last factor from O(n) down to O(1). This would greatly speed up the time it took to decode the cipher text. Unfortunately, the only way that I found to do this was to reverse the dictionary which would be another O(n) operation. This would be ideal if we had a single, or even just a few dictionaries that we were consistently reading from, however, we are constantly creating and deleting dictionaries so this method would take just as long if not longer to perform.
+      </p>
+      <p >
+        The other part of the algorithm which I believe is slowing us down a lot is the generation of a new population at the beginning of each iteration. If we have 100 top chromosomes that survived from the previous generation, then we are creating 400 new children every iteration. In the crossover method, we take a mappings from both parents, and assign them to the child. This results in a child that does not have its keys sorted alphabetically. To solve this, I sort the keys alphabetically at the end of the creation of each child. I am unsure of what algorithm that C# uses in its orderby method but its average case is likely O(n^2). 
+      </p>
+      <p>
+        In the mutation method, there is also a bottle neck with the speed. In order to check that there are no duplicate values we must do a linear search on the Dictionary. While this operation is only n=26, performing it 400 times each iteration adds up. In addition, if we do find duplicates we then go and extract the duplicates (an O(n*#ofDuplicates) action) and then find the key that pertains to each duplicate (O(n)) and assign it to a random unrepresented character. Also, remember that increasing the number of mutations up to a certain point introduces chromosomes that might have a higher score. So repeat the mutation method at least five times for every new child, and the speed again drops considerably.
+      </p>
+      <p><b>Additional Features</b></p>
+      <p>
+        After achieving an accuracy that consistently converges to solutions and improving the speed as much as possible, I would like to add some other features to make this application more versatile and fun.
+      </p>
+      <p>
+        Although I did not intend on adding these features during the course of the Senior Project, I could see adding them on my own time to add some depth to this project. The first being implementing substitution ciphers that encrypt using a Caesar method or a keyword. Decryption would remain the same, but should anyone actually want to cipher a message, they could do so by means that a layman could easily solve if they are then given the key.
+      </p>
+      <p>
+        In addition, obvious features to add would be additional types of ciphers. At the very least, perhaps I could encode text to that cipher and create a key, but not necessarily have to decrypt it. For example, a Viginere Cipher uses a series of Caesar ciphers based on the letters of a keyword.
+      </p>
       <h2>Bibliography</h2>
+      <p><a href="https://en.wikipedia.org/wiki/Substitution_cipher">https://en.wikipedia.org/wiki/Substitution_cipher</a></p>
+      <p><a href="https://en.wikipedia.org/wiki/Caesar_cipher">https://en.wikipedia.org/wiki/Caesar_cipher</a></p>
+      <p><a href="https://gist.github.com/GaretJax/3bdba874f023674c651bc871ac6ac3e1">https://gist.github.com/GaretJax/3bdba874f023674c651bc871ac6ac3e1</a></p>
+      <p>
+        Author: Derrick Erickson and Michael Hausman
+      </p>
+      <a href="http://cs.uccs.edu/~cs591/studentproj/projF2009/mhausman/doc/SubstitutionCipherPaper.pdf">http://cs.uccs.edu/~cs591/studentproj/projF2009/mhausman/doc/SubstitutionCipherPaper.pdf
+      </a>
+    </p>
+      <p>Author: Jason Brownbridge</p>
+      <p>
+        <a href="https://people.cs.uct.ac.za/~jkenwood/JasonBrownbridge.pdf">https://people.cs.uct.ac.za/~jkenwood/JasonBrownbridge.pdf</a>
+      </p> 
+      <p>
+        At the creation of this Bibliography the site hosting this pdf returned a 503 - Service Temporarily Unavailable error. I have however saved this pdf locally and can be provided upon request.
+      </p>
   </body>
 </html>
